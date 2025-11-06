@@ -63,10 +63,7 @@ const dom = {
     mobilePanel: document.getElementById("mobilePanel"),
     mobileQueueToggle: document.getElementById("mobileQueueToggle"),
     searchArea: document.getElementById("searchArea"),
-    playlistTab: document.getElementById("playlistTab"),
-    favoritesTab: document.getElementById("favoritesTab"),
-    mobilePlaylistTab: document.getElementById("mobilePlaylistTab"),
-    mobileFavoritesTab: document.getElementById("mobileFavoritesTab"),
+    libraryTabs: Array.from(document.querySelectorAll(".playlist-tab[data-target]")),
     addAllFavoritesBtn: document.getElementById("addAllFavoritesBtn"),
     importFavoritesBtn: document.getElementById("importFavoritesBtn"),
     exportFavoritesBtn: document.getElementById("exportFavoritesBtn"),
@@ -2586,20 +2583,16 @@ function setupInteractions() {
         });
     }
 
-    if (dom.playlistTab) {
-        dom.playlistTab.addEventListener("click", () => switchLibraryTab("playlist"));
-    }
-
-    if (dom.favoritesTab) {
-        dom.favoritesTab.addEventListener("click", () => switchLibraryTab("favorites"));
-    }
-
-    if (dom.mobilePlaylistTab) {
-        dom.mobilePlaylistTab.addEventListener("click", () => switchLibraryTab("playlist"));
-    }
-
-    if (dom.mobileFavoritesTab) {
-        dom.mobileFavoritesTab.addEventListener("click", () => switchLibraryTab("favorites"));
+    if (Array.isArray(dom.libraryTabs) && dom.libraryTabs.length > 0) {
+        dom.libraryTabs.forEach((tab) => {
+            if (!(tab instanceof HTMLElement)) {
+                return;
+            }
+            tab.addEventListener("click", () => {
+                const target = tab.dataset.target === "favorites" ? "favorites" : "playlist";
+                switchLibraryTab(target);
+            });
+        });
     }
 
     if (dom.importSelectedBtn) {
@@ -3947,24 +3940,16 @@ function updateFavoriteIcons() {
 function switchLibraryTab(target) {
     const showFavorites = target === "favorites";
 
-    if (dom.playlistTab) {
-        dom.playlistTab.classList.toggle("active", !showFavorites);
-        dom.playlistTab.setAttribute("aria-selected", showFavorites ? "false" : "true");
-    }
-
-    if (dom.favoritesTab) {
-        dom.favoritesTab.classList.toggle("active", showFavorites);
-        dom.favoritesTab.setAttribute("aria-selected", showFavorites ? "true" : "false");
-    }
-
-    if (dom.mobilePlaylistTab) {
-        dom.mobilePlaylistTab.classList.toggle("active", !showFavorites);
-        dom.mobilePlaylistTab.setAttribute("aria-selected", showFavorites ? "false" : "true");
-    }
-
-    if (dom.mobileFavoritesTab) {
-        dom.mobileFavoritesTab.classList.toggle("active", showFavorites);
-        dom.mobileFavoritesTab.setAttribute("aria-selected", showFavorites ? "true" : "false");
+    if (Array.isArray(dom.libraryTabs) && dom.libraryTabs.length > 0) {
+        dom.libraryTabs.forEach((tab) => {
+            if (!(tab instanceof HTMLElement)) {
+                return;
+            }
+            const target = tab.dataset.target === "favorites" ? "favorites" : "playlist";
+            const isActive = showFavorites ? target === "favorites" : target === "playlist";
+            tab.classList.toggle("active", isActive);
+            tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
     }
 
     if (dom.playlist) {
