@@ -423,6 +423,55 @@ body.background-transitioning .background-stage__layer--transition {
     background: none;
 }
 
+.import-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+}
+
+.import-selected-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.import-dropdown-caret {
+    font-size: 12px;
+}
+
+.import-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--component-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 6px 0;
+    min-width: 160px;
+    z-index: 1000;
+}
+
+.import-dropdown-menu[hidden] {
+    display: none;
+}
+
+.import-dropdown-item {
+    width: 100%;
+    padding: 8px 14px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-primary-color);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.import-dropdown-item:hover {
+    background: var(--item-hover-bg);
+}
+
 .search-results-list {
     display: flex;
     flex-direction: column;
@@ -917,6 +966,44 @@ html.mobile-view .playlist-header {
     display: none;
 }
 
+.playlist-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.playlist-tab {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary-color);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.playlist-tab:hover {
+    border-color: var(--accent-color);
+    color: var(--text-primary-color);
+}
+
+.playlist-tab.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+.favorites {
+    margin-top: 16px;
+}
+
+.favorites[hidden] {
+    display: none !important;
+}
+
 .playlist-items {
     width: 100%;
 }
@@ -947,7 +1034,7 @@ html.mobile-view .playlist-header {
 /* 播放列表项下载按钮 - 修复大小和显示问题 */
 .playlist-item-download {
     position: absolute;
-    right: 35px; /* Adjusted position */
+    right: 62px; /* Adjusted position to accommodate favorite按钮 */
     top: 50%;
     transform: translateY(-50%);
     background: var(--success-color);
@@ -999,6 +1086,41 @@ html.mobile-view .playlist-header {
     justify-content: center;
 }
 
+.playlist-item-favorite {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-item-favorite .fas {
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.playlist-item-favorite.is-active .fas {
+    color: #ff4d67;
+}
+
+.playlist-items .playlist-item:hover .playlist-item-favorite {
+    opacity: 1;
+}
+
+.playlist-item-favorite:hover .fas {
+    transform: scale(1.1);
+}
+
 .playlist-items .playlist-item:hover .playlist-item-remove {
     opacity: 1;
 }
@@ -1006,6 +1128,87 @@ html.mobile-view .playlist-header {
 .playlist-item-remove:hover {
     background: rgba(255, 59, 48, 1);
     transform: translateY(-50%) scale(1.05);
+}
+
+.favorite-toggle {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.favorite-toggle:hover {
+    color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.favorite-toggle.is-active {
+    color: #ff4d67;
+}
+
+.current-song-actions {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    gap: 8px;
+}
+
+.current-favorite-btn {
+    font-size: 18px;
+}
+
+.favorites .playlist-items .playlist-item {
+    padding-right: 110px;
+}
+
+.favorite-item-action {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--component-bg);
+    border: none;
+    color: var(--text-secondary-color);
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.favorite-item-action--add {
+    right: 74px;
+}
+
+.favorite-item-action--download {
+    right: 42px;
+}
+
+.favorite-item-action--remove {
+    right: 10px;
+    background: rgba(255, 59, 48, 0.8);
+    color: #fff;
+}
+
+.favorites .playlist-item:hover .favorite-item-action {
+    opacity: 1;
+}
+
+.favorite-item-action:hover {
+    transform: translateY(-50%) scale(1.05);
+    color: var(--text-primary-color);
+}
+
+.favorite-item-action--remove:hover {
+    background: rgba(255, 59, 48, 1);
 }
 /* 动态质量菜单样式 */
 .dynamic-quality-menu {
