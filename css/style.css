@@ -807,6 +807,10 @@ body.background-transitioning .background-stage__layer--transition {
     box-sizing: border-box;
 }
 
+html.desktop-view .playlist {
+    padding-top: 72px;
+}
+
 
 .playlist-header {
     position: absolute;
@@ -821,26 +825,16 @@ body.background-transitioning .background-stage__layer--transition {
     z-index: 5;
 }
 
-.playlist-label {
+.playlist-header > * {
+    pointer-events: auto;
+}
+
+.playlist-header .playlist-tabs {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    color: var(--text-secondary-color);
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    line-height: 1.2;
-    pointer-events: none;
-    text-transform: none;
-    white-space: nowrap;
-}
-
-html.desktop-view body.dark-mode .playlist-label {
-    color: var(--text-color);
-}
-
-html.mobile-view .playlist-label {
-    display: none;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
 }
 
 .playlist-actions-tray {
@@ -969,12 +963,50 @@ html.mobile-view .playlist-header {
 .playlist-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 12px;
 }
 
 .playlist-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary-color);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+.playlist-tab:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.playlist-tab:hover:not(.active) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.playlist-tab.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.mobile-panel-header .playlist-tabs {
+    display: flex;
+    gap: 6px;
     flex: 1;
-    padding: 10px 12px;
+}
+
+.mobile-panel-header .playlist-tab {
+    flex: 1;
+    padding: 8px 12px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     background: transparent;
@@ -985,15 +1017,15 @@ html.mobile-view .playlist-header {
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.playlist-tab:hover {
-    border-color: var(--accent-color);
-    color: var(--text-primary-color);
+.mobile-panel-header .playlist-tab.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
 }
 
-.playlist-tab.active {
-    background: var(--accent-color);
-    color: #fff;
-    border-color: var(--accent-color);
+.mobile-panel-header .playlist-tab:hover:not(.active) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 .favorites {

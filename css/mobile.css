@@ -580,6 +580,7 @@ body.mobile-view .mobile-panel-header {
     grid-template-columns: 1fr auto;
     align-items: center;
     column-gap: 12px;
+    row-gap: 8px;
     color: #ffffff;
 }
 
@@ -590,12 +591,6 @@ body.mobile-view .mobile-panel-handle {
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.28);
     margin: 0 auto 10px;
-}
-
-body.mobile-view .mobile-panel-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
 }
 
 body.mobile-view .mobile-panel-actions {

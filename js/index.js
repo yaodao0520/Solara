@@ -61,11 +61,12 @@ const dom = {
     mobileQualityToggle: document.getElementById("mobileQualityToggle"),
     mobileQualityLabel: document.getElementById("mobileQualityLabel"),
     mobilePanel: document.getElementById("mobilePanel"),
-    mobilePanelTitle: document.getElementById("mobilePanelTitle"),
     mobileQueueToggle: document.getElementById("mobileQueueToggle"),
     searchArea: document.getElementById("searchArea"),
     playlistTab: document.getElementById("playlistTab"),
     favoritesTab: document.getElementById("favoritesTab"),
+    mobilePlaylistTab: document.getElementById("mobilePlaylistTab"),
+    mobileFavoritesTab: document.getElementById("mobileFavoritesTab"),
     addAllFavoritesBtn: document.getElementById("addAllFavoritesBtn"),
     importFavoritesBtn: document.getElementById("importFavoritesBtn"),
     exportFavoritesBtn: document.getElementById("exportFavoritesBtn"),
@@ -148,7 +149,8 @@ function updateMobileClearPlaylistVisibility() {
     const isPlaylistView = !body || !currentView || currentView === "playlist";
     const playlistSongs = (typeof state !== "undefined" && Array.isArray(state.playlistSongs)) ? state.playlistSongs : [];
     const isEmpty = playlistSongs.length === 0 || !playlistElement || playlistElement.classList.contains("empty");
-    const shouldShow = isPlaylistView && !isEmpty;
+    const isPlaylistVisible = Boolean(playlistElement && !playlistElement.hasAttribute("hidden"));
+    const shouldShow = isPlaylistView && isPlaylistVisible && !isEmpty;
     button.hidden = !shouldShow;
     button.setAttribute("aria-hidden", shouldShow ? "false" : "true");
 }
@@ -2592,6 +2594,14 @@ function setupInteractions() {
         dom.favoritesTab.addEventListener("click", () => switchLibraryTab("favorites"));
     }
 
+    if (dom.mobilePlaylistTab) {
+        dom.mobilePlaylistTab.addEventListener("click", () => switchLibraryTab("playlist"));
+    }
+
+    if (dom.mobileFavoritesTab) {
+        dom.mobileFavoritesTab.addEventListener("click", () => switchLibraryTab("favorites"));
+    }
+
     if (dom.importSelectedBtn) {
         dom.importSelectedBtn.addEventListener("click", (event) => {
             event.preventDefault();
@@ -3947,6 +3957,16 @@ function switchLibraryTab(target) {
         dom.favoritesTab.setAttribute("aria-selected", showFavorites ? "true" : "false");
     }
 
+    if (dom.mobilePlaylistTab) {
+        dom.mobilePlaylistTab.classList.toggle("active", !showFavorites);
+        dom.mobilePlaylistTab.setAttribute("aria-selected", showFavorites ? "false" : "true");
+    }
+
+    if (dom.mobileFavoritesTab) {
+        dom.mobileFavoritesTab.classList.toggle("active", showFavorites);
+        dom.mobileFavoritesTab.setAttribute("aria-selected", showFavorites ? "true" : "false");
+    }
+
     if (dom.playlist) {
         if (showFavorites) {
             dom.playlist.classList.remove("active");
@@ -5159,9 +5179,6 @@ function switchMobileView(view) {
     }
     if (isMobileView && document.body) {
         document.body.setAttribute("data-mobile-panel-view", view);
-        if (dom.mobilePanelTitle) {
-            dom.mobilePanelTitle.textContent = view === "lyrics" ? "歌词" : "播放列表";
-        }
         updateMobileClearPlaylistVisibility();
     }
 }

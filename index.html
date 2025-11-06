@@ -219,7 +219,28 @@
             <div class="mobile-panel" id="mobilePanel">
                 <div class="mobile-panel-header" id="mobilePanelHeader">
                     <div class="mobile-panel-handle" aria-hidden="true"></div>
-                    <div class="mobile-panel-title" id="mobilePanelTitle">播放列表</div>
+                    <div class="playlist-tabs" role="tablist">
+                        <button
+                            id="mobilePlaylistTab"
+                            class="playlist-tab active"
+                            type="button"
+                            role="tab"
+                            aria-selected="true"
+                            data-target="playlist"
+                        >
+                            播放列表
+                        </button>
+                        <button
+                            id="mobileFavoritesTab"
+                            class="playlist-tab"
+                            type="button"
+                            role="tab"
+                            aria-selected="false"
+                            data-target="favorites"
+                        >
+                            收藏列表
+                        </button>
+                    </div>
                     <div class="mobile-panel-actions">
                         <button
                             id="mobileImportPlaylistBtn"
@@ -259,32 +280,26 @@
                     </div>
                 </div>
 
-                <div class="playlist-tabs" role="tablist">
-                    <button
-                        id="playlistTab"
-                        class="playlist-tab active"
-                        type="button"
-                        role="tab"
-                        aria-selected="true"
-                        data-target="playlist"
-                    >
-                        播放列表
-                    </button>
-                    <button
-                        id="favoritesTab"
-                        class="playlist-tab"
-                        type="button"
-                        role="tab"
-                        aria-selected="false"
-                        data-target="favorites"
-                    >
-                        收藏列表
-                    </button>
-                </div>
-
                 <div class="playlist active empty" id="playlist" role="tabpanel" aria-labelledby="playlistTab">
                     <div class="playlist-header">
-                        <div class="playlist-label" aria-hidden="true">播放列表</div>
+                        <div class="playlist-tabs" role="tablist">
+                            <button
+                                id="playlistTab"
+                                class="playlist-tab active"
+                                type="button"
+                                role="tab"
+                                aria-selected="true"
+                                data-target="playlist"
+                            >播放列表</button>
+                            <button
+                                id="favoritesTab"
+                                class="playlist-tab"
+                                type="button"
+                                role="tab"
+                                aria-selected="false"
+                                data-target="favorites"
+                            >收藏列表</button>
+                        </div>
                         <div class="playlist-actions-tray" role="group" aria-label="播放列表操作">
                             <input
                                 id="importPlaylistInput"
@@ -329,7 +344,6 @@
                 </div>
                 <div class="favorites empty" id="favorites" role="tabpanel" aria-labelledby="favoritesTab" hidden>
                     <div class="playlist-header">
-                        <div class="playlist-label" aria-hidden="true">收藏列表</div>
                         <div class="playlist-actions-tray" role="group" aria-label="收藏列表操作">
                             <button
                                 class="playlist-action-btn"
