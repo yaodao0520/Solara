@@ -1028,8 +1028,15 @@ html.mobile-view .playlist-header {
     color: var(--primary-color);
 }
 
-.favorites {
-    margin-top: 16px;
+/* 使收藏列表与播放列表共享相同的定位和内边距 */
+.playlist.favorites {
+    margin-top: 0;
+    padding-top: 72px;
+}
+
+/* 切换时隐藏非激活列表的标题和操作按钮 */
+.playlist:not(.active) .playlist-header {
+    display: none;
 }
 
 .favorites[hidden] {
