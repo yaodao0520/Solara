@@ -1374,12 +1374,18 @@ html.mobile-view .playlist-header .playlist-action-btn {
 }
 
 html.mobile-view .mobile-panel-header .playlist-tabs {
-    gap: 2px;
+    gap: 6px;
+    justify-self: stretch;
+    max-width: 100%;
 }
 
 html.mobile-view .mobile-panel-header .playlist-tab {
-    padding: 6px 12px;
-    font-size: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-size: 13px;
 }
 
 html.mobile-view .playlist-items .playlist-item {
