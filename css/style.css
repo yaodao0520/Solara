@@ -1547,11 +1547,25 @@ html.mobile-view .favorites .favorite-item-action--remove {
     transform: translateY(0); 
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
 }
-.controls button#loadOnlineBtn { 
-    width: auto; 
-    border-radius: 25px; 
-    padding: 0 25px; 
-    gap: 10px; 
+.controls button#loadOnlineBtn {
+    width: auto;
+    border-radius: 25px;
+    padding: 0 25px;
+    gap: 10px;
+}
+.controls button#loadOnlineBtn .btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+}
+.controls button#loadOnlineBtn .btn-text i {
+    line-height: 1;
+}
+.controls button#loadOnlineBtn .loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .controls button:disabled { 
     background: var(--text-secondary-color); 

@@ -4987,10 +4987,10 @@ async function exploreOnlineMusic() {
             desktopButton.disabled = isLoading;
             desktopButton.classList.toggle("is-loading", Boolean(isLoading));
             if (btnText) {
-                btnText.style.display = isLoading ? "none" : "flex";
+                btnText.style.display = isLoading ? "none" : "";
             }
             if (loader) {
-                loader.style.display = isLoading ? "inline-block" : "none";
+                loader.style.display = isLoading ? "inline-flex" : "none";
             }
         }
         if (mobileButton) {
@@ -5023,20 +5023,45 @@ async function exploreOnlineMusic() {
             url_id: song.url_id,
         }));
 
-        state.playlistSongs = normalizedSongs;
-        state.onlineSongs = normalizedSongs;
+        const existingSongs = Array.isArray(state.playlistSongs) ? state.playlistSongs.slice() : [];
+        const existingKeys = new Set(existingSongs
+            .map((song) => getSongKey(song))
+            .filter((key) => typeof key === "string" && key.length > 0));
+
+        const appendedSongs = [];
+        for (const song of normalizedSongs) {
+            const key = getSongKey(song);
+            if (key && existingKeys.has(key)) {
+                continue;
+            }
+            appendedSongs.push(song);
+            if (key) {
+                existingKeys.add(key);
+            }
+        }
+
+        if (appendedSongs.length === 0) {
+            showNotification("探索雷达：本次未找到新的歌曲，当前列表已包含这些曲目", "info");
+            debugLog(`探索雷达无新增歌曲，关键词：${randomGenre}`);
+            return;
+        }
+
+        state.playlistSongs = existingSongs.concat(appendedSongs);
+        state.onlineSongs = state.playlistSongs.slice();
         state.currentPlaylist = "playlist";
         state.currentList = "playlist";
-        state.currentTrackIndex = normalizedSongs.length > 0 ? 0 : -1;
 
         renderPlaylist();
         updatePlaylistHighlight();
 
-        showNotification(`探索雷达：发现了${normalizedSongs.length}首 ${randomGenre} 歌曲`);
-        debugLog(`探索雷达加载成功，关键词：${randomGenre}，歌曲数：${normalizedSongs.length}`);
+        showNotification(`探索雷达：新增${appendedSongs.length}首 ${randomGenre} 歌曲`);
+        debugLog(`探索雷达加载成功，关键词：${randomGenre}，新增歌曲数：${appendedSongs.length}`);
 
-        if (normalizedSongs.length > 0) {
+        const shouldAutoplay = existingSongs.length === 0 && state.playlistSongs.length > 0;
+        if (shouldAutoplay) {
             await playPlaylistSong(0);
+        } else {
+            savePlayerState();
         }
     } catch (error) {
         console.error("探索雷达错误:", error);
