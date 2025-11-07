@@ -709,7 +709,7 @@ body.background-transitioning .background-stage__layer--transition {
     text-align: center;
     box-sizing: border-box;
     height: 100%;
-    overflow-y: auto;
+    overflow: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -756,11 +756,24 @@ body.background-transitioning .background-stage__layer--transition {
     width: 100%;
 }
 
+.current-song-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.current-song-title-row .current-song-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .current-song-title {
     font-size: 16px;
     font-weight: 600;
     color: var(--text-color);
-    margin-bottom: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -809,6 +822,11 @@ body.background-transitioning .background-stage__layer--transition {
 
 html.desktop-view .playlist {
     padding-top: 72px;
+}
+
+.playlist[hidden],
+.playlist.favorites[hidden] {
+    display: none !important;
 }
 
 
@@ -945,6 +963,10 @@ html.mobile-view .playlist-header {
     font-style: italic;
     opacity: 0.7;
     font-size: 0.9em;
+}
+
+.playlist.favorites.empty::before {
+    content: "";
 }
 
 .playlist-scroll {
@@ -1188,13 +1210,6 @@ html.mobile-view .playlist-header {
 
 .favorite-toggle.is-active {
     color: #ff4d67;
-}
-
-.current-song-actions {
-    display: flex;
-    align-items: center;
-    margin: 6px 0;
-    gap: 8px;
 }
 
 .current-favorite-btn {
