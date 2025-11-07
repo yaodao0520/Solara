@@ -1032,6 +1032,9 @@ html.mobile-view .playlist-header {
 html.mobile-view #playlist.playlist .playlist-header {
     display: none;
 }
+html.mobile-view #favorites.playlist .playlist-header {
+    display: none;
+}
 
 html.mobile-view .playlist-header .playlist-tabs {
     display: none;
@@ -1121,17 +1124,17 @@ html.mobile-view .playlist-header .playlist-action-btn {
 .mobile-panel-header .playlist-tabs {
     display: flex;
     gap: 4px;
-    flex: 1;
+    justify-self: flex-start;
 }
 
 .mobile-panel-header .playlist-tab {
-    flex: 1;
-    padding: 6px 10px;
+    flex: 0 0 auto;
+    padding: 4px 8px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
     background: transparent;
     color: var(--text-secondary-color);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;

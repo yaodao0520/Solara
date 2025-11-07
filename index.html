@@ -242,38 +242,80 @@
                         </button>
                     </div>
                     <div class="mobile-panel-actions">
-                        <button
-                            id="mobileImportPlaylistBtn"
-                            class="mobile-panel-action-btn"
-                            type="button"
-                            aria-label="导入播放列表"
-                            title="导入播放列表"
-                        >
-                            <i class="fas fa-file-import" aria-hidden="true"></i>
-                        </button>
-                        <button
-                            id="mobileExportPlaylistBtn"
-                            class="mobile-panel-action-btn"
-                            type="button"
-                            aria-label="导出播放列表"
-                            title="导出播放列表"
-                            aria-disabled="true"
-                            disabled
-                        >
-                            <i class="fas fa-file-export" aria-hidden="true"></i>
-                        </button>
-                        <button
-                            id="mobileClearPlaylistBtn"
-                            class="mobile-panel-action-btn mobile-panel-clear-btn"
-                            type="button"
-                            aria-label="清空播放列表"
-                            title="清空播放列表"
-                            onclick="clearPlaylist()"
-                            hidden
-                            aria-hidden="true"
-                        >
-                            <i class="fas fa-trash" aria-hidden="true"></i>
-                        </button>
+                        <div class="mobile-actions-group" id="mobilePlaylistActions" role="group" aria-label="播放列表操作" aria-hidden="false">
+                            <button
+                                id="mobileImportPlaylistBtn"
+                                class="mobile-panel-action-btn"
+                                type="button"
+                                aria-label="导入播放列表"
+                                title="导入播放列表"
+                            >
+                                <i class="fas fa-file-import" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                id="mobileExportPlaylistBtn"
+                                class="mobile-panel-action-btn"
+                                type="button"
+                                aria-label="导出播放列表"
+                                title="导出播放列表"
+                                aria-disabled="true"
+                                disabled
+                            >
+                                <i class="fas fa-file-export" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                id="mobileClearPlaylistBtn"
+                                class="mobile-panel-action-btn mobile-panel-clear-btn"
+                                type="button"
+                                aria-label="清空播放列表"
+                                title="清空播放列表"
+                                onclick="clearPlaylist()"
+                                hidden
+                                aria-hidden="true"
+                            >
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="mobile-actions-group" id="mobileFavoritesActions" role="group" aria-label="收藏列表操作" hidden aria-hidden="true">
+                            <button
+                                id="mobileAddAllFavoritesBtn"
+                                class="mobile-panel-action-btn"
+                                type="button"
+                                aria-label="全部添加到播放列表"
+                                title="全部添加到播放列表"
+                            >
+                                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                id="mobileImportFavoritesBtn"
+                                class="mobile-panel-action-btn"
+                                type="button"
+                                aria-label="导入收藏列表"
+                                title="导入收藏列表"
+                            >
+                                <i class="fas fa-file-import" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                id="mobileExportFavoritesBtn"
+                                class="mobile-panel-action-btn"
+                                type="button"
+                                aria-label="导出收藏列表"
+                                title="导出收藏列表"
+                                aria-disabled="true"
+                                disabled
+                            >
+                                <i class="fas fa-file-export" aria-hidden="true"></i>
+                            </button>
+                            <button
+                                id="mobileClearFavoritesBtn"
+                                class="mobile-panel-action-btn mobile-panel-clear-btn"
+                                type="button"
+                                aria-label="清空收藏列表"
+                                title="清空收藏列表"
+                            >
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
                         <button id="mobilePanelClose" class="mobile-close-btn mobile-panel-action-btn" type="button" aria-label="收起播放面板">
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>

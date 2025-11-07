@@ -597,7 +597,17 @@ body.mobile-view .mobile-panel-actions {
     display: inline-flex;
     align-items: center;
     justify-self: end;
-    gap: 10px;
+    gap: 8px;
+}
+
+body.mobile-view .mobile-actions-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.mobile-view .mobile-actions-group[hidden] {
+    display: none !important;
 }
 
 body.mobile-view .mobile-panel-action-btn,

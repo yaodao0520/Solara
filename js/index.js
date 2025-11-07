@@ -56,6 +56,12 @@ const dom = {
     mobileSearchClose: document.getElementById("mobileSearchClose"),
     mobilePanelClose: document.getElementById("mobilePanelClose"),
     mobileClearPlaylistBtn: document.getElementById("mobileClearPlaylistBtn"),
+    mobilePlaylistActions: document.getElementById("mobilePlaylistActions"),
+    mobileFavoritesActions: document.getElementById("mobileFavoritesActions"),
+    mobileAddAllFavoritesBtn: document.getElementById("mobileAddAllFavoritesBtn"),
+    mobileImportFavoritesBtn: document.getElementById("mobileImportFavoritesBtn"),
+    mobileExportFavoritesBtn: document.getElementById("mobileExportFavoritesBtn"),
+    mobileClearFavoritesBtn: document.getElementById("mobileClearFavoritesBtn"),
     mobileOverlayScrim: document.getElementById("mobileOverlayScrim"),
     mobileExploreButton: document.getElementById("mobileExploreButton"),
     mobileQualityToggle: document.getElementById("mobileQualityToggle"),
@@ -150,6 +156,35 @@ function updateMobileClearPlaylistVisibility() {
     const shouldShow = isPlaylistView && isPlaylistVisible && !isEmpty;
     button.hidden = !shouldShow;
     button.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+}
+
+function updateMobileLibraryActionVisibility(showFavorites) {
+    if (!isMobileView) {
+        return;
+    }
+    const playlistGroup = dom.mobilePlaylistActions;
+    const favoritesGroup = dom.mobileFavoritesActions;
+    const showFavoritesGroup = Boolean(showFavorites);
+
+    if (playlistGroup) {
+        if (showFavoritesGroup) {
+            playlistGroup.setAttribute("hidden", "");
+            playlistGroup.setAttribute("aria-hidden", "true");
+        } else {
+            playlistGroup.removeAttribute("hidden");
+            playlistGroup.setAttribute("aria-hidden", "false");
+        }
+    }
+
+    if (favoritesGroup) {
+        if (showFavoritesGroup) {
+            favoritesGroup.removeAttribute("hidden");
+            favoritesGroup.setAttribute("aria-hidden", "false");
+        } else {
+            favoritesGroup.setAttribute("hidden", "");
+            favoritesGroup.setAttribute("aria-hidden", "true");
+        }
+    }
 }
 
 function forceCloseMobileSearchOverlay() {
@@ -2574,6 +2609,25 @@ function setupInteractions() {
         dom.clearFavoritesBtn.addEventListener("click", clearFavorites);
     }
 
+    if (dom.mobileAddAllFavoritesBtn) {
+        dom.mobileAddAllFavoritesBtn.addEventListener("click", addAllFavoritesToPlaylist);
+    }
+
+    if (dom.mobileImportFavoritesBtn && dom.importFavoritesInput) {
+        dom.mobileImportFavoritesBtn.addEventListener("click", () => {
+            dom.importFavoritesInput.value = "";
+            dom.importFavoritesInput.click();
+        });
+    }
+
+    if (dom.mobileExportFavoritesBtn) {
+        dom.mobileExportFavoritesBtn.addEventListener("click", exportFavorites);
+    }
+
+    if (dom.mobileClearFavoritesBtn) {
+        dom.mobileClearFavoritesBtn.addEventListener("click", clearFavorites);
+    }
+
     if (dom.currentFavoriteToggle) {
         dom.currentFavoriteToggle.addEventListener("click", () => {
             if (!state.currentSong) {
@@ -3972,6 +4026,7 @@ function switchLibraryTab(target) {
         }
     }
 
+    updateMobileLibraryActionVisibility(showFavorites);
     updateMobileClearPlaylistVisibility();
     closeImportSelectedMenu();
 }
@@ -4065,13 +4120,25 @@ function updateFavoriteActionStates() {
         dom.exportFavoritesBtn.disabled = !hasFavorites;
         dom.exportFavoritesBtn.setAttribute("aria-disabled", hasFavorites ? "false" : "true");
     }
+    if (dom.mobileExportFavoritesBtn) {
+        dom.mobileExportFavoritesBtn.disabled = !hasFavorites;
+        dom.mobileExportFavoritesBtn.setAttribute("aria-disabled", hasFavorites ? "false" : "true");
+    }
     if (dom.clearFavoritesBtn) {
         dom.clearFavoritesBtn.disabled = !hasFavorites;
         dom.clearFavoritesBtn.setAttribute("aria-disabled", hasFavorites ? "false" : "true");
     }
+    if (dom.mobileClearFavoritesBtn) {
+        dom.mobileClearFavoritesBtn.disabled = !hasFavorites;
+        dom.mobileClearFavoritesBtn.setAttribute("aria-disabled", hasFavorites ? "false" : "true");
+    }
     if (dom.addAllFavoritesBtn) {
         dom.addAllFavoritesBtn.disabled = !hasFavorites;
         dom.addAllFavoritesBtn.setAttribute("aria-disabled", hasFavorites ? "false" : "true");
+    }
+    if (dom.mobileAddAllFavoritesBtn) {
+        dom.mobileAddAllFavoritesBtn.disabled = !hasFavorites;
+        dom.mobileAddAllFavoritesBtn.setAttribute("aria-disabled", hasFavorites ? "false" : "true");
     }
 }
 
