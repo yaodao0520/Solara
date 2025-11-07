@@ -449,14 +449,20 @@ body.background-transitioning .background-stage__layer--transition {
     position: absolute;
     top: calc(100% + 4px);
     right: 0;
-    background: var(--component-bg);
+    background: rgba(255, 255, 255, 0.98);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
     padding: 6px 0;
     min-width: 160px;
     z-index: 20000;
     pointer-events: auto;
+}
+
+.dark-mode .import-dropdown-menu {
+    background: rgba(28, 28, 28, 0.98);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
 }
 
 .import-dropdown-menu[hidden] {
@@ -1445,13 +1451,19 @@ html.mobile-view .favorites .favorite-item-action--remove {
 }
 /* 动态质量菜单样式 */
 .dynamic-quality-menu {
-    background: var(--component-bg);
+    background: rgba(255, 255, 255, 0.98);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
     padding: 8px 0;
     min-width: 150px;
     animation: fadeIn 0.2s ease;
+}
+
+.dark-mode .dynamic-quality-menu {
+    background: rgba(28, 28, 28, 0.98);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
 }
 
 .dynamic-quality-menu .quality-option {
@@ -1722,7 +1734,7 @@ input[type="range"]:active::-moz-range-thumb {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.2);
     border: 1px solid var(--border-color);
@@ -1732,10 +1744,14 @@ input[type="range"]:active::-moz-range-thumb {
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.2s ease;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     z-index: 100000;
     pointer-events: none;
+}
+
+.dark-mode .player-quality-menu {
+    background: #1c1c1c;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
 }
 
 .player-quality-menu.show {
@@ -1775,6 +1791,7 @@ input[type="range"]:active::-moz-range-thumb {
     color: var(--text-color);
     cursor: pointer;
     transition: all 0.2s ease;
+    background: transparent;
 }
 
 .player-quality-option:hover,
@@ -1834,7 +1851,7 @@ input[type="range"]:active::-moz-range-thumb {
     position: absolute;
     top: 100%;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border: 2px solid var(--primary-color);
     border-radius: 8px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.25);
@@ -1844,9 +1861,13 @@ input[type="range"]:active::-moz-range-thumb {
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     pointer-events: none;
+}
+
+.dark-mode .quality-menu {
+    background: #1c1c1c;
+    border-color: rgba(26, 188, 156, 0.6);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
 }
 
 /* 确保搜索结果项在质量菜单显示时不会遮挡 */
@@ -1878,7 +1899,7 @@ input[type="range"]:active::-moz-range-thumb {
     font-size: 10px;
     font-weight: 500;
     color: var(--text-color);
-    background: rgba(255, 255, 255, 0.8);
+    background: transparent;
     border-bottom: 1px solid rgba(26, 188, 156, 0.18);
 }
 
