@@ -635,22 +635,19 @@ body.background-transitioning .background-stage__layer--transition {
 }
 
 .search-result-actions .action-btn.favorite {
-    border-color: rgba(26, 188, 156, 0.55);
-    box-shadow: 0 6px 16px rgba(26, 188, 156, 0.25);
-}
-
-.search-result-actions .action-btn.favorite.is-active {
     background: #ff4d67;
+    color: #ffffff;
     border-color: rgba(255, 77, 103, 0.65);
     box-shadow: 0 6px 16px rgba(255, 77, 103, 0.3);
 }
 
-.search-result-actions .action-btn.favorite {
-    color: #ffffff;
+.search-result-actions .action-btn.favorite.is-active {
+    filter: brightness(1.05);
 }
 
 .search-result-actions .action-btn.favorite:hover {
     color: #ffffff;
+    filter: brightness(1.05);
 }
 
 .search-result-actions .action-btn.play {
@@ -1188,12 +1185,13 @@ html.mobile-view .playlist-header {
     z-index: 5;
 }
 
+
 .playlist-item-favorite {
     right: 74px;
-    background: var(--primary-color);
+    background: #ff4d67;
     color: #ffffff;
-    border-color: rgba(26, 188, 156, 0.5);
-    box-shadow: 0 4px 10px rgba(26, 188, 156, 0.18);
+    border-color: rgba(255, 77, 103, 0.6);
+    box-shadow: 0 4px 12px rgba(255, 77, 103, 0.25);
 }
 
 .playlist-item-favorite .fas,
@@ -1203,10 +1201,7 @@ html.mobile-view .playlist-header {
 }
 
 .playlist-item-favorite.is-active {
-    background: #ff4d67;
-    color: #ffffff;
-    border-color: rgba(255, 77, 103, 0.6);
-    box-shadow: 0 4px 12px rgba(255, 77, 103, 0.25);
+    filter: brightness(1.02);
 }
 
 .playlist-item-favorite.is-active .fas,
@@ -1232,7 +1227,7 @@ html.mobile-view .playlist-header {
 
 .playlist-item-favorite:hover {
     transform: translateY(calc(-50% - 1px));
-    box-shadow: 0 8px 18px rgba(26, 188, 156, 0.3);
+    box-shadow: 0 8px 20px rgba(255, 77, 103, 0.35);
     filter: brightness(1.05);
 }
 
