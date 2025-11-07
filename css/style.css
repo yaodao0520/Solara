@@ -1017,7 +1017,35 @@ body.dark-mode .playlist-action-btn {
 }
 
 html.mobile-view .playlist-header {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 12px;
+    pointer-events: auto;
+}
+
+html.mobile-view #playlist.playlist .playlist-header {
     display: none;
+}
+
+html.mobile-view .playlist-header .playlist-tabs {
+    display: none;
+}
+
+html.mobile-view .playlist-header .playlist-actions-tray {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+html.mobile-view .playlist-header .playlist-action-btn {
+    width: 36px;
+    height: 36px;
 }
 
 /* 当播放列表有内容时，调整布局 */
@@ -1352,26 +1380,27 @@ html.mobile-view .mobile-panel-header .playlist-tab {
 }
 
 html.mobile-view .playlist-items .playlist-item {
-    padding-right: 100px;
+    padding-right: 108px;
 }
 
 html.mobile-view .playlist-item-favorite,
 html.mobile-view .playlist-item-download,
 html.mobile-view .playlist-item-remove {
-    width: 18px;
-    height: 18px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
 }
 
 html.mobile-view .playlist-item-favorite {
-    right: 60px;
+    right: 88px;
 }
 
 html.mobile-view .playlist-item-download {
-    right: 34px;
+    right: 48px;
 }
 
 html.mobile-view .playlist-item-remove {
-    right: 8px;
+    right: 12px;
 }
 
 html.mobile-view .favorites .favorite-item-action {
@@ -1383,24 +1412,25 @@ html.mobile-view .favorites .favorite-item-action:hover {
 }
 
 html.mobile-view .favorites .playlist-items .playlist-item {
-    padding-right: 100px;
+    padding-right: 108px;
 }
 
 html.mobile-view .favorites .favorite-item-action {
-    width: 18px;
-    height: 18px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
 }
 
 html.mobile-view .favorites .favorite-item-action--add {
-    right: 60px;
+    right: 88px;
 }
 
 html.mobile-view .favorites .favorite-item-action--download {
-    right: 34px;
+    right: 48px;
 }
 
 html.mobile-view .favorites .favorite-item-action--remove {
-    right: 8px;
+    right: 12px;
 }
 /* 动态质量菜单样式 */
 .dynamic-quality-menu {
