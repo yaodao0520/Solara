@@ -429,6 +429,7 @@ body.background-transitioning .background-stage__layer--transition {
     position: relative;
     display: inline-flex;
     align-items: stretch;
+    z-index: 20000;
 }
 
 .import-selected-btn {
@@ -454,7 +455,8 @@ body.background-transitioning .background-stage__layer--transition {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     padding: 6px 0;
     min-width: 160px;
-    z-index: 1000;
+    z-index: 20000;
+    pointer-events: auto;
 }
 
 .import-dropdown-menu[hidden] {
@@ -797,14 +799,18 @@ body.background-transitioning .background-stage__layer--transition {
 }
 
 .current-song-title-row {
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     width: 100%;
     margin-bottom: 5px;
 }
 
 .current-song-title-row .current-song-title {
-    display: block;
-    width: 100%;
+    flex: 0 1 auto;
+    max-width: calc(100% - 40px);
+    min-width: 0;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -812,10 +818,12 @@ body.background-transitioning .background-stage__layer--transition {
 }
 
 .current-song-title-row .current-favorite-btn {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    position: static;
+    transform: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
 }
 
 .current-song-title {
@@ -971,18 +979,6 @@ body.dark-mode .playlist-action-btn {
     border-color: rgba(231, 76, 60, 0.28);
 }
 
-#clearFavoritesBtn {
-    color: rgba(231, 76, 60, 0.85);
-    border-color: rgba(231, 76, 60, 0.28);
-    background: rgba(255, 59, 48, 0.8);
-}
-
-#clearFavoritesBtn:hover,
-#clearFavoritesBtn:focus-visible {
-    background: rgba(255, 59, 48, 1);
-    color: #fff;
-}
-
 .playlist-action-btn--clear:hover:not(:disabled),
 .playlist-action-btn--clear:focus-visible:not(:disabled) {
     filter: brightness(1.05);
@@ -1131,6 +1127,7 @@ html.mobile-view .playlist-header {
 
 .playlist-items .playlist-item {
     padding: 10px 12px;
+    padding-right: 140px;
     border-radius: 8px;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
@@ -1152,83 +1149,36 @@ html.mobile-view .playlist-header {
     background-color: var(--item-current-bg);
 }
 
-/* 播放列表项下载按钮 - 修复大小和显示问题 */
-.playlist-item-download {
-    position: absolute;
-    right: 35px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--success-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 4px;
-    font-size: 10px;
-    cursor: pointer;
-    opacity: 0;
-    transition: all 0.2s ease;
-    z-index: 1000;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.playlist-items .playlist-item:hover .playlist-item-download {
-    opacity: 1;
-}
-
-.playlist-item-download:hover {
-    background: var(--success-color-hover);
-    transform: translateY(-50%) scale(1.05);
-}
-
-/* 播放列表项删除按钮 */
+.playlist-item-favorite,
+.playlist-item-download,
 .playlist-item-remove {
     position: absolute;
-    right: 8px; /* Adjusted position */
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 59, 48, 0.8);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 4px;
-    font-size: 10px;
-    cursor: pointer;
-    opacity: 0;
-    transition: all 0.2s ease;
-    z-index: 1000;
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+    z-index: 5;
 }
 
 .playlist-item-favorite {
-    position: absolute;
-    right: 62px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 104px;
     background: var(--primary-color);
-    border: none;
     color: #ffffff;
-    cursor: pointer;
-    opacity: 0;
-    transition: all 0.2s ease;
-    z-index: 1000;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
 }
 
 .playlist-item-favorite .fas,
 .playlist-item-favorite .far {
+    margin: 0;
     transition: color 0.2s ease;
 }
 
@@ -1242,46 +1192,72 @@ html.mobile-view .playlist-header {
     color: #ffffff;
 }
 
-.playlist-items .playlist-item:hover .playlist-item-favorite {
-    opacity: 1;
-}
-
-.playlist-item-favorite:hover {
+.playlist-item-download {
+    right: 56px;
+    background: var(--success-color);
     color: #ffffff;
 }
 
-.playlist-item-favorite.favorite-toggle:hover {
-    transform: translateY(-50%);
+.playlist-item-remove {
+    right: 8px;
+    background: rgba(255, 59, 48, 0.9);
+    color: #ffffff;
 }
 
+.playlist-items .playlist-item:hover .playlist-item-favorite,
+.playlist-items .playlist-item:hover .playlist-item-download,
 .playlist-items .playlist-item:hover .playlist-item-remove {
     opacity: 1;
 }
 
+.playlist-item-favorite:hover {
+    transform: translateY(calc(-50% - 1px));
+    box-shadow: 0 8px 18px rgba(26, 188, 156, 0.25);
+    filter: brightness(1.05);
+}
+
+.playlist-item-download:hover {
+    transform: translateY(calc(-50% - 1px));
+    box-shadow: 0 8px 18px rgba(46, 204, 113, 0.25);
+    filter: brightness(1.05);
+}
+
 .playlist-item-remove:hover {
-    background: rgba(255, 59, 48, 1);
-    transform: translateY(-50%) scale(1.05);
+    transform: translateY(calc(-50% - 1px));
+    box-shadow: 0 8px 18px rgba(231, 76, 60, 0.28);
+    filter: brightness(1.05);
 }
 
 .favorite-toggle {
     border: none;
-    background: transparent;
+    background: none;
     color: var(--text-secondary-color);
     cursor: pointer;
     padding: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .favorite-toggle:hover {
-    color: var(--accent-color);
-    transform: scale(1.05);
+    color: var(--primary-color);
 }
 
 .favorite-toggle.is-active {
     color: #ff4d67;
+}
+
+.playlist-item-favorite.favorite-toggle {
+    color: #ffffff;
+}
+
+.playlist-item-favorite.favorite-toggle:hover {
+    color: #ffffff;
+}
+
+.playlist-item-favorite.favorite-toggle.is-active {
+    color: #ffffff;
 }
 
 .current-favorite-btn {
@@ -1289,7 +1265,7 @@ html.mobile-view .playlist-header {
 }
 
 .favorites .playlist-items .playlist-item {
-    padding-right: 110px;
+    padding-right: 150px;
 }
 
 .favorite-item-action {
