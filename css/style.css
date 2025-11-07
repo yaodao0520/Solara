@@ -1125,12 +1125,14 @@ html.mobile-view .playlist-header .playlist-action-btn {
     display: flex;
     gap: 4px;
     justify-self: flex-start;
+    flex: 0 0 auto;
 }
 
 .mobile-panel-header .playlist-tab {
     flex: 0 0 auto;
-    padding: 4px 8px;
-    border-radius: 10px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
     border: 1px solid var(--border-color);
     background: transparent;
     color: var(--text-secondary-color);
@@ -1375,15 +1377,15 @@ html.mobile-view .playlist-header .playlist-action-btn {
 
 html.mobile-view .mobile-panel-header .playlist-tabs {
     gap: 6px;
-    justify-self: stretch;
-    max-width: 100%;
+    justify-self: flex-start;
+    flex: 0 0 auto;
 }
 
 html.mobile-view .mobile-panel-header .playlist-tab {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
     height: 38px;
-    padding: 0 16px;
+    padding: 0 14px;
     border-radius: 999px;
     font-size: 13px;
 }
