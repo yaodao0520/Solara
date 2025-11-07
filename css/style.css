@@ -433,8 +433,11 @@ body.background-transitioning .background-stage__layer--transition {
 
 .import-selected-btn {
     display: inline-flex;
+    flex-direction: row;
     align-items: center;
     gap: 6px;
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
 }
 
 .import-dropdown-caret {
@@ -643,8 +646,11 @@ body.background-transitioning .background-stage__layer--transition {
 
 .import-selected-btn {
     display: inline-flex;
+    flex-direction: row;
     align-items: center;
     gap: 6px;
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
     border: none;
     border-radius: 999px;
     padding: 8px 16px;
@@ -791,21 +797,25 @@ body.background-transitioning .background-stage__layer--transition {
 }
 
 .current-song-title-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
+    position: relative;
     width: 100%;
     margin-bottom: 5px;
 }
 
 .current-song-title-row .current-song-title {
-    flex: 0 0 auto;
+    display: block;
+    width: 100%;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: calc(100% - 40px);
+}
+
+.current-song-title-row .current-favorite-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .current-song-title {
@@ -959,6 +969,18 @@ body.dark-mode .playlist-action-btn {
 .playlist-action-btn--clear {
     color: rgba(231, 76, 60, 0.85);
     border-color: rgba(231, 76, 60, 0.28);
+}
+
+#clearFavoritesBtn {
+    color: rgba(231, 76, 60, 0.85);
+    border-color: rgba(231, 76, 60, 0.28);
+    background: rgba(255, 59, 48, 0.8);
+}
+
+#clearFavoritesBtn:hover,
+#clearFavoritesBtn:focus-visible {
+    background: rgba(255, 59, 48, 1);
+    color: #fff;
 }
 
 .playlist-action-btn--clear:hover:not(:disabled),
@@ -1207,7 +1229,7 @@ html.mobile-view .playlist-header {
 
 .playlist-item-favorite .fas,
 .playlist-item-favorite .far {
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .playlist-item-favorite.is-active {
@@ -1224,13 +1246,12 @@ html.mobile-view .playlist-header {
     opacity: 1;
 }
 
-.playlist-item-favorite:hover .fas,
-.playlist-item-favorite:hover .far {
-    transform: scale(1.1);
-}
-
 .playlist-item-favorite:hover {
     color: #ffffff;
+}
+
+.playlist-item-favorite.favorite-toggle:hover {
+    transform: translateY(-50%);
 }
 
 .playlist-items .playlist-item:hover .playlist-item-remove {
