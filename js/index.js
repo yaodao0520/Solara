@@ -3052,16 +3052,6 @@ function createSearchResultItem(song, index) {
     const actions = document.createElement("div");
     actions.className = "search-result-actions";
 
-    const playButton = document.createElement("button");
-    playButton.className = "action-btn play";
-    playButton.type = "button";
-    playButton.title = "播放";
-    playButton.innerHTML = '<i class="fas fa-play"></i> 播放';
-    playButton.addEventListener("click", (event) => {
-        event.stopPropagation();
-        playSearchResult(index);
-    });
-
     const favoriteButton = document.createElement("button");
     favoriteButton.className = "action-btn favorite favorite-toggle";
     favoriteButton.type = "button";
@@ -3071,6 +3061,16 @@ function createSearchResultItem(song, index) {
     favoriteButton.addEventListener("click", (event) => {
         event.stopPropagation();
         toggleFavorite(song);
+    });
+
+    const playButton = document.createElement("button");
+    playButton.className = "action-btn play";
+    playButton.type = "button";
+    playButton.title = "播放";
+    playButton.innerHTML = '<i class="fas fa-play"></i>';
+    playButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        playSearchResult(index);
     });
 
     const downloadButton = document.createElement("button");
@@ -3105,8 +3105,8 @@ function createSearchResultItem(song, index) {
 
     downloadButton.appendChild(qualityMenu);
 
-    actions.appendChild(playButton);
     actions.appendChild(favoriteButton);
+    actions.appendChild(playButton);
     actions.appendChild(downloadButton);
 
     item.appendChild(selectionToggle);
@@ -3854,11 +3854,11 @@ function renderPlaylist() {
             <button class="playlist-item-favorite favorite-toggle" type="button" data-playlist-action="favorite" data-index="${index}" data-favorite-key="${songKey}" title="收藏" aria-label="收藏">
                 <i class="fa-regular fa-heart"></i>
             </button>
-            <button class="playlist-item-remove" type="button" data-playlist-action="remove" data-index="${index}" title="从播放列表移除">
-                <i class="fas fa-times"></i>
-            </button>
             <button class="playlist-item-download" type="button" data-playlist-action="download" data-index="${index}" title="下载">
                 <i class="fas fa-download"></i>
+            </button>
+            <button class="playlist-item-remove" type="button" data-playlist-action="remove" data-index="${index}" title="从播放列表移除">
+                <i class="fas fa-times"></i>
             </button>
         </div>`;
     }).join("");
