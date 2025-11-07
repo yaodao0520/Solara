@@ -4985,6 +4985,16 @@ function pickRandomExploreGenre() {
     return EXPLORE_RADAR_GENRES[index];
 }
 
+const EXPLORE_RADAR_SOURCES = ["netease", "kuwo"];
+
+function pickRandomExploreSource() {
+    if (!Array.isArray(EXPLORE_RADAR_SOURCES) || EXPLORE_RADAR_SOURCES.length === 0) {
+        return "netease";
+    }
+    const index = Math.floor(Math.random() * EXPLORE_RADAR_SOURCES.length);
+    return EXPLORE_RADAR_SOURCES[index];
+}
+
 // 探索雷达：通过代理后端随机搜歌并刷新播放列表
 async function exploreOnlineMusic() {
     const desktopButton = dom.loadOnlineBtn;
@@ -5013,12 +5023,12 @@ async function exploreOnlineMusic() {
         setLoadingState(true);
 
         const randomGenre = pickRandomExploreGenre();
-        const source = state.searchSource || "netease";
+        const source = pickRandomExploreSource();
         const results = await API.search(randomGenre, source, 30, 1);
 
         if (!Array.isArray(results) || results.length === 0) {
             showNotification("探索雷达：未找到歌曲", "error");
-            debugLog(`探索雷达未找到歌曲，关键词：${randomGenre}`);
+            debugLog(`探索雷达未找到歌曲，关键词：${randomGenre}，音源：${source}`);
             return;
         }
 
@@ -5065,7 +5075,7 @@ async function exploreOnlineMusic() {
         updatePlaylistHighlight();
 
         showNotification(`探索雷达：新增${appendedSongs.length}首 ${randomGenre} 歌曲`);
-        debugLog(`探索雷达加载成功，关键词：${randomGenre}，新增歌曲数：${appendedSongs.length}`);
+        debugLog(`探索雷达加载成功，关键词：${randomGenre}，音源：${source}，新增歌曲数：${appendedSongs.length}`);
 
         const shouldAutoplay = existingSongs.length === 0 && state.playlistSongs.length > 0;
         if (shouldAutoplay) {
