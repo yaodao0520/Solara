@@ -1092,18 +1092,18 @@ html.mobile-view .playlist-header {
 
 .mobile-panel-header .playlist-tabs {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     flex: 1;
 }
 
 .mobile-panel-header .playlist-tab {
     flex: 1;
-    padding: 8px 12px;
-    border-radius: 12px;
+    padding: 6px 10px;
+    border-radius: 10px;
     border: 1px solid var(--border-color);
     background: transparent;
     color: var(--text-secondary-color);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -1340,6 +1340,67 @@ html.mobile-view .playlist-header {
 
 .favorite-item-action--remove:hover {
     background: rgba(255, 59, 48, 1);
+}
+
+html.mobile-view .mobile-panel-header .playlist-tabs {
+    gap: 2px;
+}
+
+html.mobile-view .mobile-panel-header .playlist-tab {
+    padding: 5px 8px;
+    font-size: 12px;
+}
+
+html.mobile-view .playlist-items .playlist-item {
+    padding-right: 100px;
+}
+
+html.mobile-view .playlist-item-favorite,
+html.mobile-view .playlist-item-download,
+html.mobile-view .playlist-item-remove {
+    width: 18px;
+    height: 18px;
+}
+
+html.mobile-view .playlist-item-favorite {
+    right: 60px;
+}
+
+html.mobile-view .playlist-item-download {
+    right: 34px;
+}
+
+html.mobile-view .playlist-item-remove {
+    right: 8px;
+}
+
+html.mobile-view .favorites .favorite-item-action {
+    opacity: 1;
+}
+
+html.mobile-view .favorites .favorite-item-action:hover {
+    transform: translateY(-50%);
+}
+
+html.mobile-view .favorites .playlist-items .playlist-item {
+    padding-right: 100px;
+}
+
+html.mobile-view .favorites .favorite-item-action {
+    width: 18px;
+    height: 18px;
+}
+
+html.mobile-view .favorites .favorite-item-action--add {
+    right: 60px;
+}
+
+html.mobile-view .favorites .favorite-item-action--download {
+    right: 34px;
+}
+
+html.mobile-view .favorites .favorite-item-action--remove {
+    right: 8px;
 }
 /* 动态质量菜单样式 */
 .dynamic-quality-menu {
