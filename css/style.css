@@ -1295,6 +1295,8 @@ html.mobile-view .playlist-header .playlist-action-btn {
     color: #ffffff;
     border: 1px solid rgba(255, 77, 103, 0.6);
     box-shadow: 0 4px 12px rgba(255, 77, 103, 0.25);
+    transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease,
+        filter 0.2s ease, color 0.2s ease;
 }
 
 .playlist-item-favorite.favorite-toggle:hover {
