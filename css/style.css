@@ -1264,15 +1264,22 @@ html.mobile-view .playlist-header {
 }
 
 .playlist-item-favorite.favorite-toggle {
+    padding: 0;
+    background: #ff4d67;
     color: #ffffff;
+    border: 1px solid rgba(255, 77, 103, 0.6);
+    box-shadow: 0 4px 12px rgba(255, 77, 103, 0.25);
 }
 
 .playlist-item-favorite.favorite-toggle:hover {
     color: #ffffff;
+    background: #e6435b;
+    box-shadow: 0 8px 20px rgba(255, 77, 103, 0.35);
 }
 
 .playlist-item-favorite.favorite-toggle.is-active {
     color: #ffffff;
+    filter: brightness(1.03);
 }
 
 .current-favorite-btn {
