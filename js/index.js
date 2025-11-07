@@ -1468,6 +1468,8 @@ async function updateDynamicBackground(imageUrl) {
         return;
     }
 
+    debugLog(`动态背景: 更新至新的图片 ${imageUrl}`);
+
     if (paletteAbortController) {
         paletteAbortController.abort();
         paletteAbortController = null;
@@ -1505,6 +1507,7 @@ async function updateDynamicBackground(imageUrl) {
             return;
         }
         console.warn("获取动态背景失败:", error);
+        debugLog(`动态背景加载失败: ${error}`);
         if (requestId === paletteRequestId) {
             resetDynamicBackground();
         }
@@ -1543,7 +1546,14 @@ function debugLog(message) {
     console.log(`[DEBUG] ${message}`);
     if (state.debugMode) {
         const debugInfo = dom.debugInfo;
-        debugInfo.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+        const entry = document.createElement("div");
+        entry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+        debugInfo.appendChild(entry);
+
+        while (debugInfo.childNodes.length > 50) {
+            debugInfo.removeChild(debugInfo.firstChild);
+        }
+
         debugInfo.classList.add("show");
         debugInfo.scrollTop = debugInfo.scrollHeight;
     }
@@ -5083,12 +5093,14 @@ async function loadLyrics(song) {
             parseLyrics(lyricData.lyric);
             dom.lyrics.classList.remove("empty");
             dom.lyrics.dataset.placeholder = "default";
+            debugLog(`歌词加载成功: ${state.lyricsData.length} 行`);
         } else {
             setLyricsContentHtml("<div>暂无歌词</div>");
             dom.lyrics.classList.add("empty");
             dom.lyrics.dataset.placeholder = "message";
             state.lyricsData = [];
             state.currentLyricLine = -1;
+            debugLog("歌词加载失败: 无歌词数据");
         }
     } catch (error) {
         console.error("加载歌词失败:", error);
@@ -5097,6 +5109,7 @@ async function loadLyrics(song) {
         dom.lyrics.dataset.placeholder = "message";
         state.lyricsData = [];
         state.currentLyricLine = -1;
+        debugLog(`歌词加载失败: ${error}`);
     }
 }
 
@@ -5122,6 +5135,7 @@ function parseLyrics(lyricText) {
 
     state.lyricsData = lyrics.sort((a, b) => a.time - b.time);
     displayLyrics();
+    debugLog(`解析歌词完成: ${state.lyricsData.length} 行`);
 }
 
 function setLyricsContentHtml(html) {
@@ -5236,7 +5250,6 @@ function scrollToCurrentLyric(element, containerOverride) {
         }
     }
 
-    debugLog(`歌词滚动: 元素在容器内偏移=${elementOffsetTop}, 容器高度=${containerHeight}, 目标滚动=${finalScrollTop}`);
 }
 
 // 修复：下载歌曲
