@@ -4951,39 +4951,98 @@ function updateOnlineHighlight() {
     });
 }
 
-// 修复：探索在线音乐 - 添加到统一播放列表
+const EXPLORE_RADAR_GENRES = [
+    "流行",
+    "摇滚",
+    "古典音乐",
+    "民谣",
+    "电子",
+    "爵士",
+    "说唱",
+    "乡村",
+    "蓝调",
+    "R&B",
+    "金属",
+    "嘻哈",
+    "轻音乐",
+];
+
+function pickRandomExploreGenre() {
+    if (!Array.isArray(EXPLORE_RADAR_GENRES) || EXPLORE_RADAR_GENRES.length === 0) {
+        return "流行";
+    }
+    const index = Math.floor(Math.random() * EXPLORE_RADAR_GENRES.length);
+    return EXPLORE_RADAR_GENRES[index];
+}
+
+// 探索雷达：通过代理后端随机搜歌并刷新播放列表
 async function exploreOnlineMusic() {
-    const btn = dom.loadOnlineBtn;
-    const btnText = btn.querySelector(".btn-text");
-    const loader = btn.querySelector(".loader");
+    const desktopButton = dom.loadOnlineBtn;
+    const mobileButton = dom.mobileExploreButton;
+    const btnText = desktopButton ? desktopButton.querySelector(".btn-text") : null;
+    const loader = desktopButton ? desktopButton.querySelector(".loader") : null;
+
+    const setLoadingState = (isLoading) => {
+        if (desktopButton) {
+            desktopButton.disabled = isLoading;
+            desktopButton.classList.toggle("is-loading", Boolean(isLoading));
+            if (btnText) {
+                btnText.style.display = isLoading ? "none" : "flex";
+            }
+            if (loader) {
+                loader.style.display = isLoading ? "inline-block" : "none";
+            }
+        }
+        if (mobileButton) {
+            mobileButton.disabled = isLoading;
+            mobileButton.setAttribute("aria-disabled", isLoading ? "true" : "false");
+        }
+    };
 
     try {
-        btn.disabled = true;
-        btnText.style.display = "none";
-        loader.style.display = "inline-block";
+        setLoadingState(true);
 
-        const songs = await API.getRadarPlaylist("3778678", { limit: 50, offset: 0 });
+        const randomGenre = pickRandomExploreGenre();
+        const source = state.searchSource || "netease";
+        const results = await API.search(randomGenre, source, 30, 1);
 
-        if (songs.length > 0) {
-            // 将在线音乐添加到统一播放列表
-            state.playlistSongs = [...state.playlistSongs, ...songs];
-            state.onlineSongs = songs; // 保留原有的在线音乐列表
+        if (!Array.isArray(results) || results.length === 0) {
+            showNotification("探索雷达：未找到歌曲", "error");
+            debugLog(`探索雷达未找到歌曲，关键词：${randomGenre}`);
+            return;
+        }
 
-            // 更新播放列表显示
-            renderPlaylist();
+        const normalizedSongs = results.map((song) => ({
+            id: song.id,
+            name: song.name,
+            artist: Array.isArray(song.artist) ? song.artist.join(" / ") : (song.artist || "未知艺术家"),
+            album: song.album || "",
+            source: song.source || source,
+            lyric_id: song.lyric_id || song.id,
+            pic_id: song.pic_id || song.pic || "",
+            url_id: song.url_id,
+        }));
 
-            showNotification(`已加载 ${songs.length} 首探索雷达歌曲到播放列表`);
-            debugLog(`加载探索雷达播放列表成功: ${songs.length} 首歌曲`);
-        } else {
-            showNotification("未找到在线音乐", "error");
+        state.playlistSongs = normalizedSongs;
+        state.onlineSongs = normalizedSongs;
+        state.currentPlaylist = "playlist";
+        state.currentList = "playlist";
+        state.currentTrackIndex = normalizedSongs.length > 0 ? 0 : -1;
+
+        renderPlaylist();
+        updatePlaylistHighlight();
+
+        showNotification(`探索雷达：发现了${normalizedSongs.length}首 ${randomGenre} 歌曲`);
+        debugLog(`探索雷达加载成功，关键词：${randomGenre}，歌曲数：${normalizedSongs.length}`);
+
+        if (normalizedSongs.length > 0) {
+            await playPlaylistSong(0);
         }
     } catch (error) {
-        console.error("加载在线音乐失败:", error);
-        showNotification("加载失败，请稍后重试", "error");
+        console.error("探索雷达错误:", error);
+        showNotification("探索雷达获取失败，请稍后重试", "error");
     } finally {
-        btn.disabled = false;
-        btnText.style.display = "flex";
-        loader.style.display = "none";
+        setLoadingState(false);
     }
 }
 
