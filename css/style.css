@@ -413,7 +413,7 @@ body.background-transitioning .background-stage__layer--transition {
 }
 
 .search-results-toolbar {
-    display: flex;
+    display: flex !important;
     justify-content: flex-end;
     align-items: center;
     gap: 8px;
@@ -800,11 +800,12 @@ body.background-transitioning .background-stage__layer--transition {
 }
 
 .current-song-title-row .current-song-title {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: calc(100% - 40px);
 }
 
 .current-song-title {
@@ -1274,32 +1275,32 @@ html.mobile-view .playlist-header {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: var(--component-bg);
-    border: none;
-    color: var(--text-secondary-color);
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
     cursor: pointer;
     opacity: 0;
     transition: all 0.2s ease;
+    color: #ffffff;
 }
 
 .favorite-item-action--add {
     right: 74px;
+    background: var(--primary-color);
 }
 
 .favorite-item-action--download {
     right: 42px;
+    background: var(--success-color);
 }
 
 .favorite-item-action--remove {
     right: 10px;
     background: rgba(255, 59, 48, 0.8);
-    color: #fff;
 }
 
 .favorites .playlist-item:hover .favorite-item-action {
@@ -1308,7 +1309,14 @@ html.mobile-view .playlist-header {
 
 .favorite-item-action:hover {
     transform: translateY(-50%) scale(1.05);
-    color: var(--text-primary-color);
+}
+
+.favorite-item-action--add:hover {
+    background: var(--primary-color-dark);
+}
+
+.favorite-item-action--download:hover {
+    background: var(--success-color-hover);
 }
 
 .favorite-item-action--remove:hover {
