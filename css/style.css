@@ -1566,7 +1566,8 @@ html.mobile-view .favorites .favorite-item-action--remove {
 .controls {
     grid-area: controls;
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr) auto;
+    grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "transport progress trailing";
     align-items: center;
     column-gap: 20px;
     row-gap: 12px;
@@ -1602,7 +1603,6 @@ html.mobile-view .favorites .favorite-item-action--remove {
     border-radius: 25px;
     padding: 0 25px;
     gap: 10px;
-    justify-self: flex-end;
 }
 .controls button#loadOnlineBtn .btn-text {
     display: inline-flex;
@@ -1625,6 +1625,7 @@ html.mobile-view .favorites .favorite-item-action--remove {
     box-shadow: none; 
 }
 .transport-controls {
+    grid-area: transport;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -1646,12 +1647,23 @@ html:not(.mobile-view) #playModeBtn {
 }
 
 .progress-container {
+    grid-area: progress;
     display: flex;
     align-items: center;
     gap: 12px;
     min-width: 260px;
     width: 100%;
     justify-self: stretch;
+}
+
+.control-trailing {
+    grid-area: trailing;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .progress-container span {
@@ -1674,7 +1686,12 @@ html:not(.mobile-view) #playModeBtn {
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
-    justify-self: flex-start;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+}
+
+.control-trailing #loadOnlineBtn {
+    margin-left: auto;
 }
 
 .volume-container {
