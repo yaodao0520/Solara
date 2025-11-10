@@ -68,6 +68,7 @@ const dom = {
     mobileQualityLabel: document.getElementById("mobileQualityLabel"),
     mobilePanel: document.getElementById("mobilePanel"),
     mobileQueueToggle: document.getElementById("mobileQueueToggle"),
+    shuffleToggleBtn: document.getElementById("shuffleToggleBtn"),
     searchArea: document.getElementById("searchArea"),
     libraryTabs: Array.from(document.querySelectorAll(".playlist-tab[data-target]")),
     addAllFavoritesBtn: document.getElementById("addAllFavoritesBtn"),
@@ -715,10 +716,12 @@ const state = {
     isSearchMode: false, // 新增：搜索模式状态
     playlistSongs: savedPlaylistSongs, // 新增：统一播放列表
     playMode: savedPlayMode, // 新增：播放模式 'list', 'single', 'random'
+    playlistLastNonRandomMode: savedPlayMode === "random" ? "list" : savedPlayMode,
     favoriteSongs: savedFavoriteSongs,
     currentFavoriteIndex: savedCurrentFavoriteIndex,
     currentList: savedCurrentList,
     favoritePlayMode: savedFavoritePlayMode,
+    favoriteLastNonRandomMode: savedFavoritePlayMode === "random" ? "list" : savedFavoritePlayMode,
     favoritePlaybackTime: savedFavoritePlaybackTime,
     playbackQuality: savedPlaybackQuality,
     volume: savedVolume,
@@ -1631,32 +1634,113 @@ function getActivePlayMode() {
     return state.currentList === "favorite" ? state.favoritePlayMode : state.playMode;
 }
 
+function getLastNonRandomMode() {
+    if (state.currentList === "favorite") {
+        return state.favoriteLastNonRandomMode || "list";
+    }
+    return state.playlistLastNonRandomMode || "list";
+}
+
+function rememberLastNonRandomMode() {
+    const currentMode = getActivePlayMode();
+    if (currentMode === "random") {
+        return;
+    }
+    const mode = currentMode || "list";
+    if (state.currentList === "favorite") {
+        state.favoriteLastNonRandomMode = mode;
+    } else {
+        state.playlistLastNonRandomMode = mode;
+    }
+}
+
+function updateShuffleButtonUI() {
+    const button = dom.shuffleToggleBtn;
+    if (!button) {
+        return;
+    }
+    const mode = getActivePlayMode();
+    const isRandom = mode === "random";
+    button.classList.toggle("active", isRandom);
+    button.setAttribute("aria-pressed", isRandom ? "true" : "false");
+    const label = isRandom ? "关闭随机播放" : "开启随机播放";
+    button.title = label;
+    button.setAttribute("aria-label", label);
+}
+
 function updatePlayModeUI() {
     const mode = getActivePlayMode();
-    dom.playModeBtn.innerHTML = `<i class="fas ${playModeIcons[mode] || playModeIcons.list}"></i>`;
-    dom.playModeBtn.title = `播放模式: ${playModeTexts[mode] || playModeTexts.list}`;
+    if (dom.playModeBtn) {
+        dom.playModeBtn.innerHTML = `<i class="fas ${playModeIcons[mode] || playModeIcons.list}"></i>`;
+        dom.playModeBtn.title = `播放模式: ${playModeTexts[mode] || playModeTexts.list}`;
+    }
+    updateShuffleButtonUI();
+}
+
+function setPlayMode(mode, { announce = true } = {}) {
+    const validModes = ["list", "single", "random"];
+    if (!validModes.includes(mode)) {
+        return getActivePlayMode();
+    }
+    const isFavoriteList = state.currentList === "favorite";
+    const key = isFavoriteList ? "favoritePlayMode" : "playMode";
+    const previousMode = state[key];
+    if (previousMode === mode) {
+        updatePlayModeUI();
+        return mode;
+    }
+
+    state[key] = mode;
+    if (mode !== "random") {
+        if (isFavoriteList) {
+            state.favoriteLastNonRandomMode = mode;
+        } else {
+            state.playlistLastNonRandomMode = mode;
+        }
+    }
+
+    if (isFavoriteList) {
+        saveFavoriteState();
+    } else {
+        savePlayerState();
+    }
+
+    updatePlayModeUI();
+
+    if (announce) {
+        const modeText = playModeTexts[mode] || playModeTexts.list;
+        showNotification(`播放模式: ${modeText}`);
+        debugLog(`播放模式切换为: ${mode} (列表: ${state.currentList})`);
+    }
+
+    return mode;
 }
 
 // 新增：播放模式切换
 function togglePlayMode() {
-    const modes = ["list", "single", "random"];
+    const modes = isMobileView ? ["list", "single", "random"] : ["list", "single"];
     const currentMode = getActivePlayMode();
-    const currentIndex = modes.indexOf(currentMode);
+    let currentIndex = modes.indexOf(currentMode);
+    if (currentIndex === -1) {
+        currentIndex = 0;
+    }
     const nextIndex = (currentIndex + 1) % modes.length;
     const nextMode = modes[nextIndex];
-
-    if (state.currentList === "favorite") {
-        state.favoritePlayMode = nextMode;
-        saveFavoriteState();
-    } else {
-        state.playMode = nextMode;
-        savePlayerState();
+    if (nextMode === "random") {
+        rememberLastNonRandomMode();
     }
-    updatePlayModeUI();
+    setPlayMode(nextMode);
+}
 
-    const modeText = playModeTexts[nextMode] || playModeTexts.list;
-    showNotification(`播放模式: ${modeText}`);
-    debugLog(`播放模式切换为: ${nextMode} (列表: ${state.currentList})`);
+function toggleShuffleMode() {
+    const currentMode = getActivePlayMode();
+    if (currentMode === "random") {
+        const fallback = getLastNonRandomMode();
+        setPlayMode(fallback);
+        return;
+    }
+    rememberLastNonRandomMode();
+    setPlayMode("random");
 }
 
 function formatTime(seconds) {
@@ -2716,7 +2800,12 @@ function setupInteractions() {
 
     // 播放模式按钮事件
     updatePlayModeUI();
-    dom.playModeBtn.addEventListener("click", togglePlayMode);
+    if (dom.playModeBtn) {
+        dom.playModeBtn.addEventListener("click", togglePlayMode);
+    }
+    if (dom.shuffleToggleBtn) {
+        dom.shuffleToggleBtn.addEventListener("click", toggleShuffleMode);
+    }
 
     // 搜索相关事件 - 修复搜索下拉框显示问题
     dom.searchBtn.addEventListener("click", (e) => {

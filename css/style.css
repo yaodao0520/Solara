@@ -1640,6 +1640,18 @@ html:not(.mobile-view) #playModeBtn {
     display: none;
 }
 
+#shuffleToggleBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transport-button--shuffle.active {
+    background: rgba(243, 117, 109, 0.18);
+    color: var(--primary-color);
+    box-shadow: 0 6px 20px rgba(243, 117, 109, 0.35);
+}
+
 #playPauseBtn {
     width: 60px;
     height: 60px;
