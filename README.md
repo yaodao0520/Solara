@@ -42,6 +42,7 @@
 2. 在 **Project Settings → Build & Output Settings** 中，将 *Framework Preset* 设为 **Other**，并将 *Build Command* 与 *Output Directory* 均留空，以便直接发布仓库根目录的静态文件。
 3. 完成首次部署后，通过 Vercel 分配的域名访问站点即可体验播放器。
 4. 若需开启访问口令，请在 **Settings → Environment Variables** 中新增 `PASSWORD` 变量并重新部署；仓库自带的 `/api/login.ts` 与 `/api/proxy.ts` 会自动作为 Serverless Functions 提供鉴权与代理能力。
+5. 仓库根目录的 `vercel.json` 已将 `/api` 下的 TypeScript 函数绑定到 `@vercel/node@5.5.5` 运行时，确保 Vercel 能正常安装构建器并执行部署。
 
 ## ⚙️ 配置提示
 - API 基地址定义在 index.html 中的 `API.baseUrl`（约 1300 行），可替换为自建接口域名。
