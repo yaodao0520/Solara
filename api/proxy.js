@@ -1,5 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
 const API_BASE_URL = 'https://music-api.gdstudio.xyz/api.php';
 const KUWO_HOST_PATTERN = /(^|\.)kuwo\.cn$/i;
 const SAFE_RESPONSE_HEADERS = [
@@ -12,11 +10,15 @@ const SAFE_RESPONSE_HEADERS = [
   'last-modified',
   'expires'
 ];
-
 const DEFAULT_CACHE_CONTROL = 'no-store';
 
-function createCorsHeaders(headers: Record<string, string>): Record<string, string> {
-  const result: Record<string, string> = {};
+function getHeader(req, name) {
+  const value = req.headers[name];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function createCorsHeaders(headers) {
+  const result = {};
   for (const key of Object.keys(headers)) {
     if (SAFE_RESPONSE_HEADERS.includes(key.toLowerCase())) {
       result[key] = headers[key];
@@ -29,7 +31,7 @@ function createCorsHeaders(headers: Record<string, string>): Record<string, stri
   return result;
 }
 
-function handleOptions(res: VercelResponse) {
+function handleOptions(res) {
   res.status(204);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS');
@@ -38,11 +40,11 @@ function handleOptions(res: VercelResponse) {
   res.end();
 }
 
-function isAllowedKuwoHost(hostname: string): boolean {
+function isAllowedKuwoHost(hostname) {
   return KUWO_HOST_PATTERN.test(hostname);
 }
 
-function normalizeKuwoUrl(rawUrl: string): URL | null {
+function normalizeKuwoUrl(rawUrl) {
   try {
     const parsed = new URL(rawUrl);
     if (!isAllowedKuwoHost(parsed.hostname)) return null;
@@ -54,28 +56,28 @@ function normalizeKuwoUrl(rawUrl: string): URL | null {
   }
 }
 
-async function proxyKuwoAudio(targetUrl: string, req: VercelRequest, res: VercelResponse) {
+async function proxyKuwoAudio(targetUrl, req, res) {
   const normalized = normalizeKuwoUrl(targetUrl);
   if (!normalized) {
     res.status(400).send('Invalid target');
     return;
   }
 
-  const init: RequestInit = {
+  const init = {
     method: req.method,
     headers: {
-      'User-Agent': (req.headers['user-agent'] as string) ?? 'Mozilla/5.0',
+      'User-Agent': getHeader(req, 'user-agent') || 'Mozilla/5.0',
       Referer: 'https://www.kuwo.cn/'
     }
   };
 
-  const rangeHeader = req.headers['range'];
+  const rangeHeader = getHeader(req, 'range');
   if (typeof rangeHeader === 'string') {
-    (init.headers as Record<string, string>)['Range'] = rangeHeader;
+    init.headers.Range = rangeHeader;
   }
 
   const upstream = await fetch(normalized.toString(), init);
-  const headersObj: Record<string, string> = {};
+  const headersObj = {};
   upstream.headers.forEach((value, key) => {
     headersObj[key] = value;
   });
@@ -84,6 +86,7 @@ async function proxyKuwoAudio(targetUrl: string, req: VercelRequest, res: Vercel
   if (!corsHeaders['Cache-Control']) {
     corsHeaders['Cache-Control'] = 'public, max-age=3600';
   }
+
   res.status(upstream.status);
   for (const [key, value] of Object.entries(corsHeaders)) {
     res.setHeader(key, value);
@@ -93,7 +96,7 @@ async function proxyKuwoAudio(targetUrl: string, req: VercelRequest, res: Vercel
   res.end(Buffer.from(body));
 }
 
-async function proxyApiRequest(url: URL, req: VercelRequest, res: VercelResponse) {
+async function proxyApiRequest(url, req, res) {
   const apiUrl = new URL(API_BASE_URL);
   url.searchParams.forEach((value, key) => {
     if (key === 'target' || key === 'callback') return;
@@ -106,14 +109,14 @@ async function proxyApiRequest(url: URL, req: VercelRequest, res: VercelResponse
   }
 
   const source = apiUrl.searchParams.get('source');
-  const baseHeaders: Record<string, string> = {
-    'User-Agent': (req.headers['user-agent'] as string) ?? 'Mozilla/5.0',
+  const baseHeaders = {
+    'User-Agent': getHeader(req, 'user-agent') || 'Mozilla/5.0',
     Accept: 'application/json, text/plain, */*'
   };
 
   if (source === 'kuwo') {
-    baseHeaders['Referer'] = 'https://www.kuwo.cn/';
-    baseHeaders['Origin'] = 'https://www.kuwo.cn';
+    baseHeaders.Referer = 'https://www.kuwo.cn/';
+    baseHeaders.Origin = 'https://www.kuwo.cn';
     baseHeaders['Accept-Language'] = 'zh-CN,zh;q=0.9';
   }
 
@@ -121,7 +124,7 @@ async function proxyApiRequest(url: URL, req: VercelRequest, res: VercelResponse
     headers: baseHeaders
   });
 
-  const headersObj: Record<string, string> = {};
+  const headersObj = {};
   upstream.headers.forEach((value, key) => {
     headersObj[key] = value;
   });
@@ -140,7 +143,7 @@ async function proxyApiRequest(url: URL, req: VercelRequest, res: VercelResponse
   res.end(Buffer.from(bodyBuf));
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     handleOptions(res);
     return;
@@ -160,4 +163,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   await proxyApiRequest(url, req, res);
-}
+};
