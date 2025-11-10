@@ -1663,6 +1663,8 @@ function updateShuffleButtonUI() {
     const isRandom = mode === "random";
     button.classList.toggle("active", isRandom);
     button.setAttribute("aria-pressed", isRandom ? "true" : "false");
+    const iconClass = isRandom ? "shuffle-icon shuffle-icon--on" : "shuffle-icon shuffle-icon--off";
+    button.innerHTML = `<i class="fas fa-shuffle ${iconClass}"></i>`;
     const label = isRandom ? "关闭随机播放" : "开启随机播放";
     button.title = label;
     button.setAttribute("aria-label", label);

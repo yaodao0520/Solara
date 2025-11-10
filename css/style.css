@@ -1653,6 +1653,33 @@ html:not(.mobile-view) #playModeBtn {
     justify-content: center;
 }
 
+.transport-button--shuffle .shuffle-icon {
+    position: relative;
+    display: inline-flex;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.transport-button--shuffle .shuffle-icon--off {
+    opacity: 0.85;
+}
+
+.transport-button--shuffle .shuffle-icon--on {
+    transform: rotate(-18deg) scale(1.08);
+    opacity: 1;
+}
+
+.transport-button--shuffle .shuffle-icon--on::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 6px rgba(243, 117, 109, 0.45);
+}
+
 .transport-button--shuffle.active {
     background: rgba(243, 117, 109, 0.18);
     color: var(--primary-color);
