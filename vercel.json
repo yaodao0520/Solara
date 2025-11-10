@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "vercel/public",
+  "functions": {
+    "vercel/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
