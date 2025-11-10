@@ -1661,7 +1661,6 @@ function updateShuffleButtonUI() {
     }
     const mode = getActivePlayMode();
     const isRandom = mode === "random";
-    button.classList.toggle("active", isRandom);
     button.setAttribute("aria-pressed", isRandom ? "true" : "false");
     const iconClass = isRandom ? "shuffle-icon shuffle-icon--on" : "shuffle-icon shuffle-icon--off";
     button.innerHTML = `<i class="fas fa-shuffle ${iconClass}"></i>`;

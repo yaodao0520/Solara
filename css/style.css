@@ -1656,34 +1656,19 @@ html:not(.mobile-view) #playModeBtn {
 .transport-button--shuffle .shuffle-icon {
     position: relative;
     display: inline-flex;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
 }
 
 .transport-button--shuffle .shuffle-icon--off {
-    opacity: 0.85;
+    opacity: 0.9;
+    transform: scale(1);
+    filter: none;
 }
 
 .transport-button--shuffle .shuffle-icon--on {
-    transform: rotate(-18deg) scale(1.08);
+    transform: scale(1.12);
     opacity: 1;
-}
-
-.transport-button--shuffle .shuffle-icon--on::after {
-    content: "";
-    position: absolute;
-    top: -2px;
-    right: -3px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-    box-shadow: 0 0 6px rgba(243, 117, 109, 0.45);
-}
-
-.transport-button--shuffle.active {
-    background: rgba(243, 117, 109, 0.18);
-    color: var(--primary-color);
-    box-shadow: 0 6px 20px rgba(243, 117, 109, 0.35);
+    filter: drop-shadow(0 1px 6px rgba(26, 188, 156, 0.35));
 }
 
 #playPauseBtn {
