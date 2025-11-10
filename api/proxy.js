@@ -11,6 +11,23 @@ const SAFE_RESPONSE_HEADERS = [
   'expires'
 ];
 const DEFAULT_CACHE_CONTROL = 'no-store';
+const DESKTOP_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36';
+const KUWO_REFERER = 'https://www.kuwo.cn/search/list';
+
+function getClientIp(req) {
+  const forwarded = getHeader(req, 'x-forwarded-for');
+  if (typeof forwarded === 'string' && forwarded.length > 0) {
+    const first = forwarded.split(',')[0].trim();
+    if (first) return first;
+  }
+  const realIp = getHeader(req, 'x-real-ip');
+  return typeof realIp === 'string' && realIp.length > 0 ? realIp : undefined;
+}
+
+function createKuwoToken() {
+  return Math.random().toString(36).slice(2, 10);
+}
 
 function getHeader(req, name) {
   const value = req.headers[name];
@@ -66,7 +83,7 @@ async function proxyKuwoAudio(targetUrl, req, res) {
   const init = {
     method: req.method,
     headers: {
-      'User-Agent': getHeader(req, 'user-agent') || 'Mozilla/5.0',
+      'User-Agent': getHeader(req, 'user-agent') || DESKTOP_UA,
       Referer: 'https://www.kuwo.cn/'
     }
   };
@@ -110,14 +127,24 @@ async function proxyApiRequest(url, req, res) {
 
   const source = apiUrl.searchParams.get('source');
   const baseHeaders = {
-    'User-Agent': getHeader(req, 'user-agent') || 'Mozilla/5.0',
+    'User-Agent': getHeader(req, 'user-agent') || DESKTOP_UA,
     Accept: 'application/json, text/plain, */*'
   };
 
   if (source === 'kuwo') {
-    baseHeaders.Referer = 'https://www.kuwo.cn/';
+    const token = createKuwoToken();
+    baseHeaders.Referer = KUWO_REFERER;
     baseHeaders.Origin = 'https://www.kuwo.cn';
     baseHeaders['Accept-Language'] = 'zh-CN,zh;q=0.9';
+    baseHeaders['X-Requested-With'] = 'XMLHttpRequest';
+    baseHeaders.Cookie = `kw_token=${token}; csrf=${token}`;
+    baseHeaders.csrf = token;
+
+    const clientIp = getClientIp(req);
+    if (clientIp) {
+      baseHeaders['X-Forwarded-For'] = clientIp;
+      baseHeaders['X-Real-IP'] = clientIp;
+    }
   }
 
   const upstream = await fetch(apiUrl.toString(), {
