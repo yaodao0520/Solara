@@ -13,12 +13,17 @@ const SAFE_RESPONSE_HEADERS = [
   'expires'
 ];
 
+const DEFAULT_CACHE_CONTROL = 'no-store';
+
 function createCorsHeaders(headers: Record<string, string>): Record<string, string> {
   const result: Record<string, string> = {};
   for (const key of Object.keys(headers)) {
     if (SAFE_RESPONSE_HEADERS.includes(key.toLowerCase())) {
       result[key] = headers[key];
     }
+  }
+  if (!result['Cache-Control']) {
+    result['Cache-Control'] = DEFAULT_CACHE_CONTROL;
   }
   result['Access-Control-Allow-Origin'] = '*';
   return result;
@@ -76,6 +81,9 @@ async function proxyKuwoAudio(targetUrl: string, req: VercelRequest, res: Vercel
   });
 
   const corsHeaders = createCorsHeaders(headersObj);
+  if (!corsHeaders['Cache-Control']) {
+    corsHeaders['Cache-Control'] = 'public, max-age=3600';
+  }
   res.status(upstream.status);
   for (const [key, value] of Object.entries(corsHeaders)) {
     res.setHeader(key, value);
@@ -97,11 +105,20 @@ async function proxyApiRequest(url: URL, req: VercelRequest, res: VercelResponse
     return;
   }
 
+  const source = apiUrl.searchParams.get('source');
+  const baseHeaders: Record<string, string> = {
+    'User-Agent': (req.headers['user-agent'] as string) ?? 'Mozilla/5.0',
+    Accept: 'application/json, text/plain, */*'
+  };
+
+  if (source === 'kuwo') {
+    baseHeaders['Referer'] = 'https://www.kuwo.cn/';
+    baseHeaders['Origin'] = 'https://www.kuwo.cn';
+    baseHeaders['Accept-Language'] = 'zh-CN,zh;q=0.9';
+  }
+
   const upstream = await fetch(apiUrl.toString(), {
-    headers: {
-      'User-Agent': (req.headers['user-agent'] as string) ?? 'Mozilla/5.0',
-      Accept: 'application/json'
-    }
+    headers: baseHeaders
   });
 
   const headersObj: Record<string, string> = {};
