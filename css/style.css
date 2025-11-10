@@ -1632,8 +1632,15 @@ html.mobile-view .favorites .favorite-item-action--remove {
     justify-self: flex-start;
 }
 
+html:not(.mobile-view) .transport-controls {
+    justify-self: stretch;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+}
+
 html:not(.mobile-view) #playModeBtn {
-    margin-right: 8px;
+    margin-right: 0;
 }
 
 #mobileQueueToggle {
