@@ -30,19 +30,12 @@
 - 🛠️ 调试控制台：按下 Ctrl + D 呼出实时日志面板，便于排查接口或交互异常。
 
 ## 🚀 快速上手
-根据使用的托管平台，选择以下任一部署方案：
+根据使用的托管平台，推荐使用 Cloudflare Pages 进行部署：
 
 ### ✅ Cloudflare Pages
 1. Fork 或克隆本仓库。
 2. 按照 Cloudflare Pages 文档创建站点，并将本仓库作为构建来源或直接上传静态资源。
 3. 部署完成后，通过 Cloudflare Pages 分配的域名访问站点即可体验播放器。
-
-### ✅ Vercel
-1. Fork 或克隆本仓库并导入到 Vercel。
-2. 在 **Project Settings → Build & Output Settings** 中，将 *Framework Preset* 设为 **Other**，并将 *Build Command* 与 *Output Directory* 均留空，以便直接发布仓库根目录的静态文件。
-3. 完成首次部署后，通过 Vercel 分配的域名访问站点即可体验播放器。
-4. 若需开启访问口令，请在 **Settings → Environment Variables** 中新增 `PASSWORD` 变量并重新部署；仓库自带的 `/api/login.js` 与 `/api/proxy.js` 会自动作为 Serverless Functions 提供鉴权与代理能力。
-5. 仓库根目录的 `vercel.json` 会将 `/api` 下的 Node.js 函数绑定到 `@vercel/node@5.5.5` 运行时，并通过重写规则把前端的 `/proxy` 请求映射到 `/api/proxy`，确保 Vercel 能正常安装构建器并直接复用现有接口路径。
 
 ## ⚙️ 配置提示
 - API 基地址定义在 index.html 中的 `API.baseUrl`（约 1300 行），可替换为自建接口域名。
@@ -54,7 +47,6 @@
 
 ## 🔐 访问控制设置
 - **Cloudflare Pages：** 在项目的 **Settings → Functions → Environment variables** 中新增名为 `PASSWORD` 的环境变量，值为希望设置的访问口令。
-- **Vercel：** 在项目的 **Settings → Environment Variables** 中添加 `PASSWORD` 变量并重新部署。
 - 部署完成后，未登录的访问者会被自动重定向到 `/login` 页面并需输入该口令；若想关闭访问口令，删除该环境变量并重新部署即可。
 ## 🎵 使用流程
 1. 输入关键词并选择想要的曲库后发起搜索。
@@ -77,9 +69,6 @@
 ## 🗂️ 项目结构
 ```
 Music-Player/
-├── api/
-│   ├── login.js      # Vercel Serverless 登录接口
-│   └── proxy.js      # Vercel Serverless 代理接口
 ├── css/
 │   ├── desktop.css   # 桌面端布局与组件样式
 │   ├── mobile.css    # 移动端适配样式
