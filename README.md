@@ -30,10 +30,18 @@
 - 🛠️ 调试控制台：按下 Ctrl + D 呼出实时日志面板，便于排查接口或交互异常。
 
 ## 🚀 快速上手
-> ⚠️ 项目完全依赖 Cloudflare Pages Functions，目前仅支持部署到 Cloudflare Pages 环境运行。
+根据使用的托管平台，选择以下任一部署方案：
+
+### ✅ Cloudflare Pages
 1. Fork 或克隆本仓库。
 2. 按照 Cloudflare Pages 文档创建站点，并将本仓库作为构建来源或直接上传静态资源。
 3. 部署完成后，通过 Cloudflare Pages 分配的域名访问站点即可体验播放器。
+
+### ✅ Vercel
+1. Fork 或克隆本仓库并导入到 Vercel。
+2. 在 **Project Settings → Build & Output Settings** 中，将 *Build Command* 留空，将 *Output Directory* 设置为 `vercel/public`（仓库已提供 `vercel.json`，默认会覆盖这一设置）。
+3. 完成首次部署后，通过 Vercel 分配的域名访问站点即可体验播放器。
+4. 若需开启访问口令，请在 **Settings → Environment Variables** 中新增 `PASSWORD` 变量，重新部署后生效。
 
 ## ⚙️ 配置提示
 - API 基地址定义在 index.html 中的 `API.baseUrl`（约 1300 行），可替换为自建接口域名。
@@ -44,9 +52,9 @@
 - 如果想排除某些不喜欢的分类，可在 `js/index.js` 中的 `EXPLORE_RADAR_GENRES` 数组里删除对应条目或新增自己喜欢的分类，保存后重新部署即可生效。
 
 ## 🔐 访问控制设置
-- 在 Cloudflare Pages 项目的 **Settings → Functions → Environment variables** 中新增名为 `PASSWORD` 的环境变量，值为希望设置的访问口令。
-- 变量保存后重新部署站点，未登录的访问者会被自动重定向到 `/login` 页面并需输入该口令。
-- 若后续想关闭访问口令，只需在同一位置删除 `PASSWORD` 环境变量并重新部署。
+- **Cloudflare Pages：** 在项目的 **Settings → Functions → Environment variables** 中新增名为 `PASSWORD` 的环境变量，值为希望设置的访问口令。
+- **Vercel：** 在项目的 **Settings → Environment Variables** 中添加 `PASSWORD` 变量并重新部署。
+- 部署完成后，未登录的访问者会被自动重定向到 `/login` 页面并需输入该口令；若想关闭访问口令，删除该环境变量并重新部署即可。
 ## 🎵 使用流程
 1. 输入关键词并选择想要的曲库后发起搜索。
 2. 在结果列表中可试听、播放、下载或加入播放队列。
