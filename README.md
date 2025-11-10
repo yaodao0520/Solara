@@ -39,9 +39,9 @@
 
 ### ✅ Vercel
 1. Fork 或克隆本仓库并导入到 Vercel。
-2. 在 **Project Settings → Build & Output Settings** 中，将 *Build Command* 留空，将 *Output Directory* 设置为 `vercel/public`（仓库已提供 `vercel.json`，默认会覆盖这一设置）。
+2. 在 **Project Settings → Build & Output Settings** 中，将 *Framework Preset* 设为 **Other**，并将 *Build Command* 与 *Output Directory* 均留空，以便直接发布仓库根目录的静态文件。
 3. 完成首次部署后，通过 Vercel 分配的域名访问站点即可体验播放器。
-4. 若需开启访问口令，请在 **Settings → Environment Variables** 中新增 `PASSWORD` 变量，重新部署后生效。
+4. 若需开启访问口令，请在 **Settings → Environment Variables** 中新增 `PASSWORD` 变量并重新部署；仓库自带的 `/api/login.ts` 与 `/api/proxy.ts` 会自动作为 Serverless Functions 提供鉴权与代理能力。
 
 ## ⚙️ 配置提示
 - API 基地址定义在 index.html 中的 `API.baseUrl`（约 1300 行），可替换为自建接口域名。
@@ -76,6 +76,9 @@
 ## 🗂️ 项目结构
 ```
 Music-Player/
+├── api/
+│   ├── login.ts      # Vercel Serverless 登录接口
+│   └── proxy.ts      # Vercel Serverless 代理接口
 ├── css/
 │   ├── desktop.css   # 桌面端布局与组件样式
 │   ├── mobile.css    # 移动端适配样式
