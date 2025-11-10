@@ -4,5 +4,9 @@
     "api/**/*.ts": {
       "runtime": "@vercel/node@5.5.5"
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/proxy", "destination": "/api/proxy" },
+    { "source": "/proxy/(.*)", "destination": "/api/proxy" }
+  ]
 }
