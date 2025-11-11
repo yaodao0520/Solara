@@ -4143,7 +4143,28 @@ function removeFromPlaylist(index) {
 
     if (removingCurrent) {
         if (state.playlistSongs.length === 1) {
-            resetPlayerUiState();
+            dom.audioPlayer.pause();
+            dom.audioPlayer.src = "";
+            state.currentTrackIndex = -1;
+            state.currentSong = null;
+            state.currentAudioUrl = null;
+            state.currentPlaybackTime = 0;
+            state.lastSavedPlaybackTime = 0;
+            dom.progressBar.value = 0;
+            dom.progressBar.max = 0;
+            dom.currentTimeDisplay.textContent = "00:00";
+            dom.durationDisplay.textContent = "00:00";
+            updateProgressBarBackground(0, 1);
+            dom.currentSongTitle.textContent = "选择一首歌曲开始播放";
+            updateMobileToolbarTitle();
+            dom.currentSongArtist.textContent = "未知艺术家";
+            showAlbumCoverPlaceholder();
+            clearLyricsContent();
+            if (dom.lyrics) {
+                dom.lyrics.dataset.placeholder = "default";
+            }
+            dom.lyrics.classList.add("empty");
+            updatePlayPauseButton();
         } else if (index === state.playlistSongs.length - 1) {
             state.currentTrackIndex = index - 1;
         }
@@ -4179,7 +4200,7 @@ function removeFromPlaylist(index) {
     updatePlaylistActionStates();
     savePlayerState();
     showNotification("已从播放列表移除", "success");
-    resetPlayerIfLibraryEmpty();
+    clearLyricsIfLibraryEmpty();
 }
 
 function addSongToPlaylist(song) {
@@ -4309,7 +4330,7 @@ function removeFavoriteAtIndex(index) {
     saveFavoriteState();
     renderFavorites();
     updatePlayModeUI();
-    resetPlayerIfLibraryEmpty();
+    clearLyricsIfLibraryEmpty();
     return removed;
 }
 
@@ -4432,7 +4453,7 @@ function clearFavorites() {
     updateFavoriteIcons();
     updatePlayModeUI();
     showNotification("收藏列表已清空", "success");
-    resetPlayerIfLibraryEmpty();
+    clearLyricsIfLibraryEmpty();
 }
 
 function exportFavorites() {
@@ -4582,7 +4603,28 @@ function clearPlaylist() {
     if (state.playlistSongs.length === 0) return;
 
     if (state.currentPlaylist === "playlist") {
-        resetPlayerUiState();
+        dom.audioPlayer.pause();
+        dom.audioPlayer.src = "";
+        state.currentTrackIndex = -1;
+        state.currentSong = null;
+        state.currentAudioUrl = null;
+        state.currentPlaybackTime = 0;
+        state.lastSavedPlaybackTime = 0;
+        dom.progressBar.value = 0;
+        dom.progressBar.max = 0;
+        dom.currentTimeDisplay.textContent = "00:00";
+        dom.durationDisplay.textContent = "00:00";
+        updateProgressBarBackground(0, 1);
+        dom.currentSongTitle.textContent = "选择一首歌曲开始播放";
+        updateMobileToolbarTitle();
+        dom.currentSongArtist.textContent = "未知艺术家";
+        showAlbumCoverPlaceholder();
+        clearLyricsContent();
+        if (dom.lyrics) {
+            dom.lyrics.dataset.placeholder = "default";
+        }
+        dom.lyrics.classList.add("empty");
+        updatePlayPauseButton();
     }
 
     state.playlistSongs = [];
@@ -4596,7 +4638,7 @@ function clearPlaylist() {
 
     savePlayerState();
     showNotification("播放列表已清空", "success");
-    resetPlayerIfLibraryEmpty();
+    clearLyricsIfLibraryEmpty();
 }
 
 // 新增：播放播放列表中的歌曲
@@ -4866,7 +4908,7 @@ function playNext() {
     if (state.currentList === "favorite") {
         const favorites = ensureFavoriteSongsArray();
         if (favorites.length === 0) {
-            resetPlayerIfLibraryEmpty();
+            clearLyricsIfLibraryEmpty();
             return;
         }
         const mode = state.favoritePlayMode || "list";
@@ -4895,7 +4937,7 @@ function playNext() {
     }
 
     if (playlist.length === 0) {
-        resetPlayerIfLibraryEmpty();
+        clearLyricsIfLibraryEmpty();
         return;
     }
 
@@ -5226,40 +5268,7 @@ function clearLyricsContent() {
     }
 }
 
-function resetPlayerUiState() {
-    if (!dom.audioPlayer) {
-        return;
-    }
-
-    try {
-        dom.audioPlayer.pause();
-    } catch (_) {
-        // ignore pause errors
-    }
-    dom.audioPlayer.src = "";
-    state.currentTrackIndex = -1;
-    state.currentSong = null;
-    state.currentAudioUrl = null;
-    state.currentPlaybackTime = 0;
-    state.lastSavedPlaybackTime = 0;
-    dom.progressBar.value = 0;
-    dom.progressBar.max = 0;
-    dom.currentTimeDisplay.textContent = "00:00";
-    dom.durationDisplay.textContent = "00:00";
-    updateProgressBarBackground(0, 1);
-    dom.currentSongTitle.textContent = "选择一首歌曲开始播放";
-    updateMobileToolbarTitle();
-    dom.currentSongArtist.textContent = "未知艺术家";
-    showAlbumCoverPlaceholder();
-    clearLyricsContent();
-    if (dom.lyrics) {
-        dom.lyrics.dataset.placeholder = "default";
-        dom.lyrics.classList.add("empty");
-    }
-    updatePlayPauseButton();
-}
-
-function resetPlayerIfLibraryEmpty() {
+function clearLyricsIfLibraryEmpty() {
     const playlistEmpty = !Array.isArray(state.playlistSongs) || state.playlistSongs.length === 0;
     const favoritesEmpty = !Array.isArray(state.favoriteSongs) || state.favoriteSongs.length === 0;
     if (!playlistEmpty || !favoritesEmpty) {
@@ -5267,17 +5276,16 @@ function resetPlayerIfLibraryEmpty() {
     }
 
     const player = dom.audioPlayer;
-    if (!player) {
-        resetPlayerUiState();
+    const hasActiveAudio = Boolean(player && player.src && !player.ended && !player.paused);
+    if (hasActiveAudio) {
         return;
     }
 
-    const isPlaying = !player.paused && !player.ended && Boolean(player.src);
-    if (isPlaying) {
-        return;
+    clearLyricsContent();
+    if (dom.lyrics) {
+        dom.lyrics.classList.add("empty");
+        dom.lyrics.dataset.placeholder = "default";
     }
-
-    resetPlayerUiState();
 }
 
 // 修复：显示歌词
