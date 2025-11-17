@@ -43,9 +43,9 @@
 
 ### ☁️ Cloudflare D1 绑定与建表
 1. 在 Cloudflare Dashboard 的 **Workers & Pages → D1 → Create** 中新建数据库，建议命名为 `solara-db`（名称可自定）。
-2. 进入新建的数据库详情页，点击 **Settings → Bindings**，创建绑定：
-   - **Name** 填写 `DB`（必须与 `functions/api/storage.ts` 中的环境变量一致）。
-   - **Pages** 选择当前部署的 Pages 项目并保存。
+2. 打开 Pages 项目设置，依次进入 **Settings → Functions → Bindings → Add binding → D1 Database**：
+   - **Binding name** 填写 `DB`（必须与 `functions/api/storage.ts` 中的环境变量一致）。
+   - **D1 Database** 选择上一步创建的数据库并保存。
 3. 在数据库详情页切换到 **Query** 标签页，执行下方建表语句初始化两个独立的键值存储表（播放数据与收藏数据分离）：
    ```sql
    CREATE TABLE IF NOT EXISTS playback_store (
