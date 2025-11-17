@@ -350,6 +350,7 @@ const themeDefaults = {
 let paletteRequestId = 0;
 
 const REMOTE_STORAGE_ENDPOINT = "/api/storage";
+let remoteSyncEnabled = false;
 const STORAGE_KEYS_TO_SYNC = new Set([
     "playlistSongs",
     "currentTrackIndex",
@@ -498,7 +499,7 @@ function safeSetLocalStorage(key, value, options = {}) {
     } catch (error) {
         console.warn(`写入本地存储失败: ${key}`, error);
     }
-    if (!skipRemote && shouldSyncStorageKey(key)) {
+    if (!skipRemote && remoteSyncEnabled && shouldSyncStorageKey(key)) {
         persistStorageItems({ [key]: value });
     }
 }
@@ -510,7 +511,7 @@ function safeRemoveLocalStorage(key, options = {}) {
     } catch (error) {
         console.warn(`移除本地存储失败: ${key}`, error);
     }
-    if (!skipRemote && shouldSyncStorageKey(key)) {
+    if (!skipRemote && remoteSyncEnabled && shouldSyncStorageKey(key)) {
         removePersistentItems([key]);
     }
 }
@@ -968,6 +969,8 @@ async function bootstrapPersistentStorage() {
         applyPersistentSnapshotFromRemote(snapshot.data);
     } catch (error) {
         console.warn("加载远程存储失败", error);
+    } finally {
+        remoteSyncEnabled = true;
     }
 }
 
